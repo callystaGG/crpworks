@@ -97,7 +97,11 @@ em{font-family:var(--f-serif);font-style:italic;font-weight:400;color:var(--cora
 .aurora i:nth-child(1){width:620px;height:620px;background:rgba(255,107,74,.20);right:-6%;top:-12%;animation:dr1 20s ease-in-out infinite alternate}
 .aurora i:nth-child(2){width:760px;height:760px;background:rgba(34,52,90,.9);left:-16%;bottom:-30%;animation:dr2 26s ease-in-out infinite alternate}
 @keyframes dr1{to{transform:translate(-120px,90px) scale(1.15)}}@keyframes dr2{to{transform:translate(140px,-70px) scale(.9)}}
-#globe{position:absolute;inset:0;width:100%;height:100%;display:block}
+#globe{position:absolute;inset:0;z-index:1;width:100%;height:100%;display:block;opacity:.9}
+.vwrap{position:absolute;inset:0;z-index:0;opacity:.85;pointer-events:none}
+#vid{position:absolute;inset:-4%;width:108%;height:108%;display:block;animation:push 16s ease-in-out infinite alternate}
+@keyframes push{to{transform:scale(1.07) translate(-1%,-.6%)}}
+.vwrap:after{content:'';position:absolute;inset:0;background:radial-gradient(120% 90% at 60% 50%,transparent 40%,rgba(10,18,32,.85) 100%)}
 .hero:before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0%,rgba(10,18,32,.88) 30%,rgba(10,18,32,.35) 52%,transparent 68%)}
 .hero-in{position:relative;z-index:2;width:100%;padding-block:150px 90px}
 .tagline{display:inline-flex;align-items:center;gap:12px;padding:9px 16px;border:1px solid var(--line);border-radius:999px;color:var(--silver);background:rgba(10,18,32,.5);backdrop-filter:blur(6px)}
@@ -298,6 +302,7 @@ footer a:hover{color:#fff}
 <main id="top">
 <section class="hero" id="hero">
   <div class="aurora" aria-hidden="true"><i></i><i></i></div>
+  <div class="vwrap" aria-hidden="true"><canvas id="vid"></canvas></div>
   <canvas id="globe" aria-hidden="true"></canvas>
   <div class="hero-in wrap">
     <div class="tagline mono fu"><i></i><span data-i18n="hero.pill">Menerima proyek baru · Manado</span></div>
@@ -492,6 +497,50 @@ footer a:hover{color:#fff}
   var mqs = [{el:$('mq1'), dir:-1, o:0},{el:$('mq2'), dir:1, o:0}];
   mqs[1].o = 600;
 
+  /* ---------- hero light layer (stands in for a background video) ---------- */
+  var qc = $('vid'), qx = qc.getContext('2d'), qw = 0, qh = 0, vdust = [];
+  for(var i = 0; i < (innerWidth < 700 ? 50 : 90); i++) vdust.push({x:Math.random(), y:Math.random(), z:.2 + Math.random() * .8, p:Math.random() * 6.28, s:.4 + Math.random()});
+  function sizeQ(){ var r = qc.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 1.5); qw = r.width; qh = r.height; qc.width = qw * d; qc.height = qh * d; qx.setTransform(d,0,0,d,0,0); }
+  function vorb(x, y, r, col, a){ var g = qx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, 'rgba(' + col + ',' + a + ')'); g.addColorStop(1, 'rgba(' + col + ',0)'); qx.fillStyle = g; qx.beginPath(); qx.arc(x, y, r, 0, 6.2832); qx.fill(); }
+  function drawQ(t){
+    var NS = qw < 700 ? 48 : 90, s = t * .001, wg = false, cx = qw * .7, cy = qh * .5;
+    qx.globalCompositeOperation = 'source-over';
+    var bg = qx.createLinearGradient(0, 0, qw, qh); bg.addColorStop(0, '#0A1220'); bg.addColorStop(.6, '#0F1D38'); bg.addColorStop(1, '#0A1220'); qx.fillStyle = bg; qx.fillRect(0, 0, qw, qh);
+    qx.globalCompositeOperation = 'lighter';
+    vorb(qw * (.72 + Math.sin(s * .21) * .06), qh * (.45 + Math.cos(s * .17) * .08), Math.max(qw, qh) * .46, '255,107,74', .34);
+    vorb(qw * (.30 + Math.cos(s * .13) * .08), qh * (.78 + Math.sin(s * .19) * .06), Math.max(qw, qh) * .55, '34,52,90', .85);
+    vorb(qw * (.88 + Math.sin(s * .11) * .04), qh * (.15 + Math.cos(s * .23) * .05), Math.max(qw, qh) * .3, '201,207,219', .12);
+    // slow volumetric light beams
+    for(var bm = 0; bm < 3; bm++){
+      qx.save(); qx.translate(qw * (.45 + bm * .22 + Math.sin(s * .07 + bm) * .05), qh * .5); qx.rotate(-.62 + bm * .08);
+      var bw = qw * (.07 + bm * .03), gr = qx.createLinearGradient(-bw, 0, bw, 0); gr.addColorStop(0, 'rgba(255,107,74,0)'); gr.addColorStop(.5, 'rgba(255,140,110,' + (.10 - bm * .02) + ')'); gr.addColorStop(1, 'rgba(255,107,74,0)');
+      qx.fillStyle = gr; qx.fillRect(-bw, -qh, bw * 2, qh * 2); qx.restore();
+    }
+    if(wg){
+      var R0 = Math.min(qw * .27, qh * .4);
+      vorb(cx, cy, R0 * 1.5, '255,107,74', .22); vorb(cx, cy, R0 * 1.1, '201,207,219', .08);
+      qx.lineWidth = 1.3; qx.strokeStyle = 'rgba(201,207,219,.30)'; qx.beginPath(); qx.arc(cx, cy, R0, 0, 6.2832); qx.stroke();
+      for(var mm = 0; mm < 7; mm++){ var an = s * .12 + mm * Math.PI / 7; qx.strokeStyle = 'rgba(201,207,219,.2)'; qx.beginPath(); qx.ellipse(cx, cy, Math.max(1, R0 * Math.abs(Math.cos(an))), R0, 0, 0, 6.2832); qx.stroke(); }
+      for(var pp = -3; pp <= 3; pp++){ var yy = cy + R0 * pp * .27, rr = R0 * Math.sqrt(Math.max(0, 1 - Math.pow(pp * .27, 2))); qx.strokeStyle = 'rgba(201,207,219,.2)'; qx.beginPath(); qx.ellipse(cx, yy, rr, rr * .26, 0, 0, 6.2832); qx.stroke(); }
+    }
+    // orbital light trails (long-exposure comets)
+    for(var o = 0; o < 4; o++){
+      var rx = Math.min(qw, qh * 1.6) * (.34 + o * .13), ry = rx * (.34 + o * .07), tilt = -.5 + o * .35 + Math.sin(s * .05 + o) * .04, sp = (o % 2 ? -1 : 1) * (.16 + o * .03), ct = Math.cos(tilt), st = Math.sin(tilt), col = o === 1 ? '255,255,255' : '255,107,74';
+      qx.strokeStyle = 'rgba(' + col + ',' + (o === 1 ? .12 : .2) + ')'; qx.lineWidth = 1.2; qx.beginPath(); qx.ellipse(cx, cy, rx, ry, tilt, 0, 6.2832); qx.stroke();
+      var head = s * sp + o * 1.7, tail = 2.4;
+      for(var k = 0; k < NS; k++){
+        var u = head - k * (tail / NS) * (sp > 0 ? 1 : -1), px = Math.cos(u) * rx, py = Math.sin(u) * ry, X = cx + px * ct - py * st, Y = cy + px * st + py * ct, al = Math.pow(1 - k / NS, 2) * (o === 1 ? .7 : .95);
+        qx.fillStyle = 'rgba(' + col + ',' + al + ')'; qx.beginPath(); qx.arc(X, Y, 1.4 + (1 - k / NS) * 3, 0, 6.2832); qx.fill();
+        if(k === 0) vorb(X, Y, 34, col, .9);
+      }
+    }
+    // vdust
+    for(var d = 0; d < vdust.length; d++){ var q = vdust[d], dx = (q.x * qw + s * 6 * q.z * q.s + qw) % qw, dy = (q.y * qh - s * 3 * q.z + qh) % qh, tw = .3 + .7 * Math.abs(Math.sin(s * .6 + q.p)); vorb(dx, dy, 4 + q.z * 9, '201,207,219', .05 + .08 * tw * q.z); qx.fillStyle = 'rgba(255,255,255,' + (.35 * tw * q.z) + ')'; qx.fillRect(dx, dy, q.z * 1.8, q.z * 1.8); }
+    qx.globalCompositeOperation = 'source-over';
+  }
+
+    var qStill = reduce || (navigator.connection && navigator.connection.saveData) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
+
   /* ---------- globe ---------- */
   var gc = $('globe'), gx = gc.getContext('2d'), gw = 0, gh = 0, pts = [], links = [], dust = [], hv = true;
   function sizeG(){ var r = gc.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2); gw = r.width; gh = r.height; gc.width = gw * d; gc.height = gh * d; gx.setTransform(d,0,0,d,0,0); }
@@ -576,7 +625,7 @@ footer a:hover{color:#fff}
   }
   var tickS = false;
   window.addEventListener('scroll', function(){ if(!tickS){ tickS = true; requestAnimationFrame(function(){ tickS = false; onScroll(); }); } }, {passive:true});
-  window.addEventListener('resize', function(){ vw = innerWidth; vh = innerHeight; sizeG(); sizeW(); buildG(); onScroll(); });
+  window.addEventListener('resize', function(){ vw = innerWidth; vh = innerHeight; sizeQ(); sizeG(); sizeW(); buildG(); if(qStill) drawQ(4000); onScroll(); });
 
   /* reveal */
   var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ var t = e.target; t.classList.remove('pending'); io.unobserve(t); setTimeout(function(){ t.classList.remove('rv'); t.style.transitionDelay = ''; }, 1300); } }); }, {threshold:.12}) : null;
@@ -603,7 +652,7 @@ footer a:hover{color:#fff}
     if(fine){ cx2 += (rx - cx2) * .2; cy2 += (ry - cy2) * .2; ring.style.transform = 'translate3d(' + cx2 + 'px,' + cy2 + 'px,0)'; }
     var v = sy - lastSy; lastSy = sy; mqv += (v - mqv) * .1;
     mqs.forEach(function(m){ var half = m.el.scrollWidth / 2 || 1; m.o += m.dir * (.55 + Math.abs(mqv) * .35) * -1; if(m.o > half) m.o -= half; if(m.o < 0) m.o += half; m.el.style.transform = 'translate3d(' + (-m.o) + 'px,0,0) skewX(' + clamp(-mqv * .12, -8, 8) + 'deg)'; });
-    if(hv) drawG(t);
+    if(hv){ if(!qStill) drawQ(t + 4000); drawG(t); }
     if(wv) drawW();
     requestAnimationFrame(loop);
   }
@@ -712,7 +761,7 @@ footer a:hover{color:#fff}
   }
   apply(lang);
 
-  sizeG(); sizeW(); buildG(); onScroll();
+  sizeQ(); sizeG(); sizeW(); buildG(); onScroll(); drawQ(4000);
   if(reduce){ drawG(2000); drawW(); } else { requestAnimationFrame(loop); }
 })();
 </script>
