@@ -147,13 +147,10 @@ h2.h em{font-size:1.18em;letter-spacing:-.02em}
 .stk{position:sticky;top:calc(88px + var(--i)*24px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:clamp(22px,3.2vw,52px);align-items:center;border:1px solid var(--line);border-radius:32px;padding:clamp(18px,2.6vw,38px);background:linear-gradient(135deg,#1B2A4A,#0D182E);min-height:min(74vh,600px);box-shadow:0 -20px 50px -20px rgba(0,0,0,.6)}
 .shotwrap{position:relative;display:block;padding-bottom:4%}
 .bf{border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;background:#0E1A33;box-shadow:0 40px 80px -20px rgba(0,0,0,.7);transition:transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .6s}
-a.shotwrap:hover .bf{transform:translateY(-6px);box-shadow:0 50px 90px -20px rgba(255,107,74,.25)}
 .bf .bar{display:flex;align-items:center;gap:7px;padding:0 12px;height:34px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.08)}
 .bf .bar i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2)}.bf .bar i:first-child{background:var(--coral)}
-.bf .url{margin-left:8px;flex:1;min-width:0;font:500 11px var(--f-mono);color:var(--silver);background:rgba(255,255,255,.07);border-radius:7px;padding:5px 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bf img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
 .phn{position:absolute;right:-2.5%;bottom:-2%;width:20%;border:5px solid #070d1a;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -10px rgba(0,0,0,.75);background:#000;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
-a.shotwrap:hover .phn{transform:translateY(-10px) rotate(-2deg)}
 .phn img{display:block;width:100%;height:auto}
 .brandf .bd{position:relative;aspect-ratio:16/10;overflow:hidden;background:radial-gradient(90% 80% at 70% 20%,rgba(255,107,74,.2),transparent 60%),#1B2A4A}
 .brandf .bd:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,207,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(201,207,219,.07) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%);mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%)}
@@ -164,13 +161,9 @@ a.shotwrap:hover .phn{transform:translateY(-10px) rotate(-2deg)}
 .badge:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
 .badge.brand{color:var(--coral)}
 .info h3{font-size:clamp(22px,2.6vw,38px);line-height:1.06;letter-spacing:-.05em;margin:12px 0 8px}
-.dom{font:500 12px var(--f-mono);color:var(--coral);letter-spacing:.04em;word-break:break-all;margin-bottom:14px}
 .info p{margin:0 0 18px;color:var(--dim);max-width:26em}
 .tags{display:flex;gap:8px;flex-wrap:wrap}
 .tag{font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--silver)}
-.go{display:inline-flex;gap:12px;align-items:center;font-weight:600;font-size:14.5px;margin-top:24px}
-.go i{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-style:normal;transition:background .3s,transform .4s,border-color .3s,color .3s}
-.go:hover i{background:var(--coral);border-color:var(--coral);color:var(--bg);transform:rotate(-45deg)}
 .cta-card{border:1px dashed rgba(255,107,74,.5);border-radius:32px;padding:clamp(26px,4vw,52px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;background:rgba(255,107,74,.05)}
 .cta-card h3{font-size:clamp(22px,2.8vw,38px);letter-spacing:-.045em;line-height:1.1}
 .cta-card h3 em{font-size:1.18em}
@@ -331,40 +324,37 @@ footer a:hover{color:#fff}
 
 <section class="sec" id="karya">
   <div class="wrap">
-    <div class="head rv"><div><div class="eyebrow mono" data-i18n="w.eyebrow">Karya pilihan</div><h2 class="h" data-i18n="w.title">Proyek nyata yang <em>sudah berjalan</em></h2></div><p data-i18n="w.lead">Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai. Klik gambar untuk membuka situsnya.</p></div>
+    <div class="head rv"><div><div class="eyebrow mono" data-i18n="w.eyebrow">Karya pilihan</div><h2 class="h" data-i18n="w.title">Proyek nyata yang <em>sudah berjalan</em></h2></div><p data-i18n="w.lead">Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai.</p></div>
     <div class="stack">
       <article class="stk" style="--i:0">
-        <a class="shotwrap" href="https://imanueltalawaan.xyz/" target="_blank" rel="noopener" data-i18n-aria="a.p1">
-          <div class="bf"><div class="bar"><i></i><i></i><i></i><span class="url">https://imanueltalawaan.xyz</span></div><img src="karya/gmim-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p1d"></div>
+        <div class="shotwrap">
+          <div class="bf"><div class="bar"><i></i><i></i><i></i></div><img src="karya/gmim-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p1d"></div>
           <div class="phn"><img src="karya/gmim-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
-        </a>
+        </div>
         <div class="info"><div class="big">01</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
-          <h3>E-Pelayanan Jemaat<br>GMIM Imanuel Talawaan</h3><div class="dom">imanueltalawaan.xyz</div>
+          <h3>E-Pelayanan Jemaat<br>GMIM Imanuel Talawaan</h3>
           <p data-i18n="w.p1">Portal pelayanan jemaat: keuangan, pemetaan data jemaat lewat sensus, warta, dan jadwal ibadah dalam satu tempat.</p>
-          <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">Tailwind</span></div>
-          <a class="go" href="https://imanueltalawaan.xyz/" target="_blank" rel="noopener"><span data-i18n="w.visit">Kunjungi situs</span> <i>↗</i></a></div>
+          <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">Tailwind</span></div></div>
       </article>
       <article class="stk" style="--i:1">
-        <a class="shotwrap" href="https://absentuama.ai.studio/" target="_blank" rel="noopener" data-i18n-aria="a.p2">
-          <div class="bf"><div class="bar"><i></i><i></i><i></i><span class="url">https://absentuama.ai.studio</span></div><img src="karya/absen-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p2d"></div>
+        <div class="shotwrap">
+          <div class="bf"><div class="bar"><i></i><i></i><i></i></div><img src="karya/absen-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p2d"></div>
           <div class="phn"><img src="karya/absen-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
-        </a>
+        </div>
         <div class="info"><div class="big">02</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
-          <h3>Absensi BASARNAS<br>Sulawesi Utara</h3><div class="dom">absentuama.ai.studio</div>
+          <h3>Absensi BASARNAS<br>Sulawesi Utara</h3>
           <p data-i18n="w.p2">Presensi pegawai Kantor SAR Manado dengan geolokasi, selfie, pengenalan wajah, dan laporan real-time.</p>
-          <div class="tags"><span class="tag" data-i18n="w.t.geo">Geolokasi</span><span class="tag" data-i18n="w.t.face">Pengenalan wajah</span><span class="tag">React</span><span class="tag">Firebase</span></div>
-          <a class="go" href="https://absentuama.ai.studio/" target="_blank" rel="noopener"><span data-i18n="w.visit">Kunjungi situs</span> <i>↗</i></a></div>
+          <div class="tags"><span class="tag" data-i18n="w.t.geo">Geolokasi</span><span class="tag" data-i18n="w.t.face">Pengenalan wajah</span><span class="tag">React</span><span class="tag">Firebase</span></div></div>
       </article>
       <article class="stk" style="--i:2">
-        <a class="shotwrap" href="https://tunankreatif.netlify.app/" target="_blank" rel="noopener" data-i18n-aria="a.p3">
-          <div class="bf"><div class="bar"><i></i><i></i><i></i><span class="url">https://tunankreatif.netlify.app</span></div><img src="karya/tunan-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p3d"></div>
+        <div class="shotwrap">
+          <div class="bf"><div class="bar"><i></i><i></i><i></i></div><img src="karya/tunan-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p3d"></div>
           <div class="phn"><img src="karya/tunan-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
-        </a>
+        </div>
         <div class="info"><div class="big">03</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
-          <h3>Tunan Kreatif</h3><div class="dom">tunankreatif.netlify.app</div>
+          <h3>Tunan Kreatif</h3>
           <p data-i18n="w.p3">Situs studio kreatif Minahasa Utara untuk videografi, konten digital, branding, dan promosi daerah, lengkap dengan portofolio dan permintaan penawaran.</p>
-          <div class="tags"><span class="tag" data-i18n="w.t.video">Videografi</span><span class="tag" data-i18n="w.t.digital">Konten digital</span><span class="tag" data-i18n="w.t.static">Situs statis</span></div>
-          <a class="go" href="https://tunankreatif.netlify.app/" target="_blank" rel="noopener"><span data-i18n="w.visit">Kunjungi situs</span> <i>↗</i></a></div>
+          <div class="tags"><span class="tag" data-i18n="w.t.video">Videografi</span><span class="tag" data-i18n="w.t.digital">Konten digital</span><span class="tag" data-i18n="w.t.static">Situs statis</span></div></div>
       </article>
       <article class="stk" style="--i:3">
         <div class="shotwrap">
@@ -376,8 +366,7 @@ footer a:hover{color:#fff}
         <div class="info"><div class="big">04</div><div class="mono badge brand" data-i18n="w.brandb">Branding</div>
           <h3 data-i18n="w.brand">Identitas Brand CRP</h3>
           <p data-i18n="w.brandp">Logo, kartu nama dengan QR WhatsApp, dan aset media sosial dalam satu sistem warna.</p>
-          <div class="tags"><span class="tag">Logo</span><span class="tag" data-i18n="w.t.card">Kartu Nama</span><span class="tag" data-i18n="w.t.soc">Media Sosial</span></div>
-          <a class="go" data-wa-msg="brand" href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="w.similar">Minta yang serupa</span> <i>↗</i></a></div>
+          <div class="tags"><span class="tag">Logo</span><span class="tag" data-i18n="w.t.card">Kartu Nama</span><span class="tag" data-i18n="w.t.soc">Media Sosial</span></div></div>
       </article>
     </div>
     <div class="cta-card rv"><h3 data-i18n="w.next">Proyek <em>Anda</em> bisa jadi yang berikutnya</h3><a class="btn coral mag" data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="nav.cta">Chat WhatsApp</span><span class="arr">→</span></a></div>
@@ -630,12 +619,12 @@ footer a:hover{color:#fff}
       'hero.lead':'CRP membantu toko, warung, dan gereja di Manado tampil profesional di internet, dari logo dan menu sampai website lengkap.',
       'hero.cta1':'Lihat Karya','hero.cta2':'Konsultasi Gratis',
       'pr.1a':'1–2 minggu','pr.1b':'Website selesai','pr.2a':'2× revisi','pr.2b':'Sudah termasuk','pr.3a':'Gratis','pr.3b':'Konsultasi awal',
-      'w.eyebrow':'Karya pilihan','w.title':'Proyek nyata yang <em>sudah berjalan</em>','w.lead':'Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai. Klik gambar untuk membuka situsnya.',
-      'w.real':'Proyek nyata','w.brandb':'Branding','w.visit':'Kunjungi situs','w.similar':'Minta yang serupa','w.next':'Proyek <em>Anda</em> bisa jadi yang berikutnya',
+      'w.eyebrow':'Karya pilihan','w.title':'Proyek nyata yang <em>sudah berjalan</em>','w.lead':'Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai.',
+      'w.real':'Proyek nyata','w.brandb':'Branding','w.next':'Proyek <em>Anda</em> bisa jadi yang berikutnya',
       'w.p1':'Portal pelayanan jemaat: keuangan, pemetaan data jemaat lewat sensus, warta, dan jadwal ibadah dalam satu tempat.','w.p2':'Presensi pegawai Kantor SAR Manado dengan geolokasi, selfie, pengenalan wajah, dan laporan real-time.','w.p3':'Situs studio kreatif Minahasa Utara untuk videografi, konten digital, branding, dan promosi daerah, lengkap dengan portofolio dan permintaan penawaran.',
       'w.t.geo':'Geolokasi','w.t.face':'Pengenalan wajah','w.t.video':'Videografi','w.t.digital':'Konten digital','w.t.static':'Situs statis',
       'w.brand':'Identitas Brand CRP','w.brandp':'Logo, kartu nama dengan QR WhatsApp, dan aset media sosial dalam satu sistem warna.','w.t.card':'Kartu Nama','w.t.soc':'Media Sosial',
-      'a.p1':'Buka portal E-Pelayanan Jemaat GMIM Imanuel Talawaan','a.p2':'Buka aplikasi Absensi BASARNAS Sulawesi Utara','a.p3':'Buka situs Tunan Kreatif',
+      
       'a.p1d':'Halaman utama E-Pelayanan Jemaat GMIM Imanuel Talawaan','a.p2d':'Halaman login Absensi BASARNAS Sulawesi Utara','a.p3d':'Halaman utama Tunan Kreatif','a.phone':'Tampilan di HP',
       'm.tag':'DESAIN &amp; WEBSITE','m.role':'DESAINER &amp; PEMBUAT WEBSITE',
       's.eyebrow':'Layanan','s.title':'Apa yang bisa <em>kami bantu</em>','s.lead':'Paket jelas dan harga terbuka. Klien pertama mendapat harga perkenalan.',
@@ -646,7 +635,7 @@ footer a:hover{color:#fff}
       'c.title':'Punya usaha? Ayo bikin <em>tampil beda.</em>','c.lead':'Konsultasi gratis. Balasan cepat setelah jam kerja dan di akhir pekan.','c.copy':'Salin','c.copied':'Tersalin','c.scan':'Scan untuk chat','fab.tip':'Tanya-tanya dulu, gratis',
       't.eyebrow':'Kata klien','t.title':'Mereka sudah <em>mencoba</em>',
       marquee:['LOGO','MENU','FEED INSTAGRAM','WEBSITE','MENU DIGITAL QR','BRANDING'],
-      msg:{def:'Halo, saya mau tanya jasa CRP',brand:'Halo, saya tertarik dibuatkan identitas brand seperti di portofolio CRP'},
+      msg:{def:'Halo, saya mau tanya jasa CRP'},
       qrAlt:'QR code WhatsApp CRP'
     },
     en:{
@@ -657,12 +646,12 @@ footer a:hover{color:#fff}
       'hero.lead':'CRP helps shops, eateries, and churches in Manado look professional online, from logos and menus to complete websites.',
       'hero.cta1':'See the Work','hero.cta2':'Free Consultation',
       'pr.1a':'1–2 weeks','pr.1b':'Website delivered','pr.2a':'2 revisions','pr.2b':'Included','pr.3a':'Free','pr.3b':'First consultation',
-      'w.eyebrow':'Selected work','w.title':'Real projects <em>already running</em>','w.lead':'Systems and sites in daily use, from a congregation portal to staff attendance. Click an image to open the site.',
-      'w.real':'Real project','w.brandb':'Branding','w.visit':'Visit site','w.similar':'Request something similar','w.next':'Your project could be <em>next</em>',
+      'w.eyebrow':'Selected work','w.title':'Real projects <em>already running</em>','w.lead':'Systems and sites in daily use, from a congregation portal to staff attendance.',
+      'w.real':'Real project','w.brandb':'Branding','w.next':'Your project could be <em>next</em>',
       'w.p1':'A congregation service portal: finances, census-based member mapping, bulletins, and service times in one place.','w.p2':'Staff attendance for the SAR Manado office with geolocation, selfies, face recognition, and real-time reports.','w.p3':'Website for a North Minahasa creative studio: videography, digital content, branding, and regional promotion, with a portfolio and quote requests.',
       'w.t.geo':'Geolocation','w.t.face':'Face recognition','w.t.video':'Videography','w.t.digital':'Digital content','w.t.static':'Static site',
       'w.brand':'CRP Brand Identity','w.brandp':'Logo, a business card with a WhatsApp QR code, and social media assets in one color system.','w.t.card':'Business Card','w.t.soc':'Social Media',
-      'a.p1':'Open the GMIM Imanuel Talawaan congregation portal','a.p2':'Open the BASARNAS North Sulawesi attendance app','a.p3':'Open the Tunan Kreatif website',
+      
       'a.p1d':'Home page of the GMIM Imanuel Talawaan congregation portal','a.p2d':'Login page of the BASARNAS North Sulawesi attendance app','a.p3d':'Home page of Tunan Kreatif','a.phone':'Phone view',
       'm.tag':'DESIGN &amp; WEBSITE','m.role':'DESIGNER &amp; WEBSITE BUILDER',
       's.eyebrow':'Services','s.title':'How we can <em>help</em>','s.lead':'Clear packages and open pricing. First clients get an introductory price.',
@@ -673,7 +662,7 @@ footer a:hover{color:#fff}
       'c.title':'Have a business? Let’s make it <em>stand out.</em>','c.lead':'Free consultation. Quick replies after office hours and on weekends.','c.copy':'Copy','c.copied':'Copied','c.scan':'Scan to chat','fab.tip':'Ask us anything, it’s free',
       't.eyebrow':'Client words','t.title':'What clients <em>say</em>',
       marquee:['LOGOS','MENUS','INSTAGRAM FEEDS','WEBSITES','QR DIGITAL MENUS','BRANDING'],
-      msg:{def:"Hi, I'd like to ask about CRP services",brand:"Hi, I'm interested in a brand identity like the one in CRP's portfolio"},
+      msg:{def:"Hi, I'd like to ask about CRP services"},
       qrAlt:'WhatsApp QR code for CRP'
     }
   };
@@ -692,7 +681,6 @@ footer a:hover{color:#fff}
     var d = T[l]; lang = l; document.documentElement.lang = l;
     [].slice.call(document.querySelectorAll('[data-i18n]')).forEach(function(el){ var v = d[el.getAttribute('data-i18n')]; if(v != null) el.innerHTML = v; });
     [].slice.call(document.querySelectorAll('[data-i18n-alt]')).forEach(function(el){ var v = d[el.getAttribute('data-i18n-alt')]; if(v != null) el.setAttribute('alt', v); });
-    [].slice.call(document.querySelectorAll('[data-i18n-aria]')).forEach(function(el){ var v = d[el.getAttribute('data-i18n-aria')]; if(v != null) el.setAttribute('aria-label', v); });
     buildH1(d); words = d.marquee; fillMq($('mq1'), 0); fillMq($('mq2'), 1); waLinks(d);
     var qi = $('qrimg'); qi.src = 'data:image/png;base64,' + QR[l]; qi.alt = d.qrAlt;
     var sw = $('lang'); sw.setAttribute('data-lang', l);
