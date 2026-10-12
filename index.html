@@ -142,37 +142,38 @@ h2.h em{font-size:1.18em;letter-spacing:-.02em}
 .js .rv{transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
 .js .rv.pending{opacity:0;transform:translateY(46px)}
 
-/* works (pinned rail) */
-.works{position:relative;height:380vh}
-.pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3vh,34px);padding-top:70px}
-.pin .head{margin:0;padding-inline:var(--gutter)}
-.pin .head .eyebrow{margin-bottom:12px}
-.wtrack{display:flex;gap:clamp(18px,3vw,44px);padding-inline:var(--gutter);will-change:transform;align-items:stretch}
-.panel{flex:0 0 min(84vw,1060px);height:clamp(360px,56vh,540px);display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);border:1px solid var(--line);border-radius:28px;overflow:hidden;background:linear-gradient(135deg,rgba(34,52,90,.6),rgba(27,42,74,.25));position:relative;opacity:calc(.4 + var(--act,1)*.6);transition:border-color .4s}
-.panel:hover{border-color:rgba(255,107,74,.55)}
-.pinfo{padding:clamp(22px,3vw,44px);display:flex;flex-direction:column;gap:14px;min-width:0}
-.idx{display:flex;justify-content:space-between;color:var(--dim)}
-.badge{display:inline-flex;align-items:center;gap:8px;color:var(--coral)}
-.badge:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
-.badge.live{color:#8ef0b5}
-.pinfo h3{font-size:clamp(22px,2.6vw,38px);line-height:1.08;letter-spacing:-.045em;margin-top:auto}
-.pinfo p{margin:0;color:var(--dim);font-size:15.5px;max-width:26em}
-.tags{display:flex;gap:8px;flex-wrap:wrap}
-.tag{font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--silver)}
-.vlink{display:inline-flex;gap:10px;align-items:center;color:#fff;font-weight:600;font-size:14.5px;margin-top:4px;width:fit-content}
-.vlink i{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-style:normal;transition:background .3s,transform .4s,border-color .3s}
-.panel:hover .vlink i{background:var(--coral);border-color:var(--coral);color:var(--bg);transform:rotate(-45deg)}
-.vis{position:relative;overflow:hidden;background:radial-gradient(90% 80% at 70% 20%,rgba(255,107,74,.16),transparent 60%),var(--navy);border-left:1px solid var(--line)}
-.vis:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,207,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(201,207,219,.07) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%);mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%)}
-.vis .big{position:absolute;right:22px;bottom:-14px;font:300 clamp(80px,12vw,170px)/1 var(--f-display);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(201,207,219,.2)}
-.vin{position:absolute;inset:0;will-change:transform}
-.win{position:absolute;border-radius:14px;overflow:hidden;box-shadow:0 40px 80px -10px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.12)}
-.win .bar{height:30px;background:#e9ebf2;display:flex;gap:6px;align-items:center;padding:0 12px}.win .bar i{width:9px;height:9px;border-radius:50%;background:#c3c8d6}.win .bar i:first-child{background:var(--coral)}
+/* works: stacked showcase */
+.stack{display:grid;gap:28px;padding-bottom:40px}
+.stk{position:sticky;top:calc(88px + var(--i)*24px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:clamp(22px,3.2vw,52px);align-items:center;border:1px solid var(--line);border-radius:32px;padding:clamp(18px,2.6vw,38px);background:linear-gradient(135deg,#1B2A4A,#0D182E);min-height:min(74vh,600px);box-shadow:0 -20px 50px -20px rgba(0,0,0,.6)}
+.shotwrap{position:relative;display:block;padding-bottom:4%}
+.bf{border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;background:#0E1A33;box-shadow:0 40px 80px -20px rgba(0,0,0,.7);transition:transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .6s}
+a.shotwrap:hover .bf{transform:translateY(-6px);box-shadow:0 50px 90px -20px rgba(255,107,74,.25)}
+.bf .bar{display:flex;align-items:center;gap:7px;padding:0 12px;height:34px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.08)}
+.bf .bar i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2)}.bf .bar i:first-child{background:var(--coral)}
+.bf .url{margin-left:8px;flex:1;min-width:0;font:500 11px var(--f-mono);color:var(--silver);background:rgba(255,255,255,.07);border-radius:7px;padding:5px 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bf img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
+.phn{position:absolute;right:-2.5%;bottom:-2%;width:20%;border:5px solid #070d1a;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -10px rgba(0,0,0,.75);background:#000;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+a.shotwrap:hover .phn{transform:translateY(-10px) rotate(-2deg)}
+.phn img{display:block;width:100%;height:auto}
+.brandf .bd{position:relative;aspect-ratio:16/10;overflow:hidden;background:radial-gradient(90% 80% at 70% 20%,rgba(255,107,74,.2),transparent 60%),#1B2A4A}
+.brandf .bd:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,207,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(201,207,219,.07) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%);mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%)}
 .float{position:absolute;animation:bob 6s ease-in-out infinite}.float.b{animation-delay:-2.5s}
 @keyframes bob{50%{transform:translateY(-12px)}}
-.chip{background:#fff;color:#1B2A4A;border-radius:14px;padding:10px 14px;font:600 13px var(--f-body);display:flex;gap:10px;align-items:center;box-shadow:0 20px 40px rgba(0,0,0,.45);white-space:nowrap}
-.chip .d{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:12px}
-.phone{position:absolute;background:#fff;border:6px solid #0A1220;border-radius:30px;box-shadow:0 40px 80px -10px rgba(0,0,0,.6);overflow:hidden}
+.info .big{font:300 clamp(64px,9vw,128px)/.9 var(--f-display);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(201,207,219,.28)}
+.badge{display:inline-flex;align-items:center;gap:8px;color:#8ef0b5;margin-top:14px}
+.badge:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.badge.brand{color:var(--coral)}
+.info h3{font-size:clamp(22px,2.6vw,38px);line-height:1.06;letter-spacing:-.05em;margin:12px 0 8px}
+.dom{font:500 12px var(--f-mono);color:var(--coral);letter-spacing:.04em;word-break:break-all;margin-bottom:14px}
+.info p{margin:0 0 18px;color:var(--dim);max-width:26em}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--silver)}
+.go{display:inline-flex;gap:12px;align-items:center;font-weight:600;font-size:14.5px;margin-top:24px}
+.go i{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-style:normal;transition:background .3s,transform .4s,border-color .3s,color .3s}
+.go:hover i{background:var(--coral);border-color:var(--coral);color:var(--bg);transform:rotate(-45deg)}
+.cta-card{border:1px dashed rgba(255,107,74,.5);border-radius:32px;padding:clamp(26px,4vw,52px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;background:rgba(255,107,74,.05)}
+.cta-card h3{font-size:clamp(22px,2.8vw,38px);letter-spacing:-.045em;line-height:1.1}
+.cta-card h3 em{font-size:1.18em}
 
 /* services */
 .svc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;perspective:1200px}
@@ -247,13 +248,9 @@ footer a:hover{color:#fff}
 @media (max-width:1100px){.svc{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){
   .links,.hud,.prog,.cue{display:none}
-  .works{height:auto}
-  .pin{position:static;height:auto;overflow:visible;padding-block:clamp(70px,12vw,110px) 0}
-  .wtrack{flex-direction:column;transform:none!important}
-  .panel{flex:none;height:auto;grid-template-columns:minmax(0,1fr);opacity:1}
-  .vis{height:360px;border-left:0;border-top:1px solid var(--line);order:-1}
-  .pinfo h3{margin-top:10px}
-  .pin .head{margin-bottom:30px}
+  .stk{grid-template-columns:minmax(0,1fr);position:static;min-height:0}
+  .phn{right:0;bottom:0;width:24%}
+  .info .big{font-size:64px}
   .tl-line{left:23px}.st{grid-template-columns:minmax(0,1fr)}
   .st .node{left:23px}
   .st:nth-child(n) .cd{grid-column:1;margin:0 0 0 64px;text-align:left}
@@ -332,63 +329,58 @@ footer a:hover{color:#fff}
   <div class="mq"><div class="tr" id="mq2"></div></div>
 </div>
 
-<section class="works" id="karya">
-  <div class="pin">
-    <div class="head"><div><div class="eyebrow mono" data-i18n="w.eyebrow">Karya pilihan</div><h2 class="h" data-i18n="w.title">Proyek yang sudah <em>kami kerjakan</em></h2></div><p data-i18n="w.lead">Dari aplikasi jemaat sampai identitas brand. Setiap proyek dibuat supaya mudah dipakai dan enak dilihat.</p></div>
-    <div class="wtrack" id="wtrack">
-
-      <article class="panel">
-        <div class="pinfo"><div class="idx mono"><span class="badge live" data-i18n="w.real">Proyek nyata</span><span>01 / 04</span></div>
-          <h3>GMIM Imanuel Talawaan</h3><p data-i18n="w.gmim">Aplikasi web untuk jemaat: warta, jadwal ibadah, dan informasi kolom dalam satu tempat.</p>
-          <div class="tags"><span class="tag" data-i18n="w.t.app">Aplikasi Web Jemaat</span><span class="tag">React + Vite</span><span class="tag">Firebase</span></div>
-          <a class="vlink" href="https://layanangereja.ai.studio" target="_blank" rel="noopener"><span data-i18n="w.open">Buka proyek</span> <i>↗</i></a></div>
-        <div class="vis"><div class="vin">
-          <div class="win" style="left:9%;top:15%;width:96%;height:72%;background:#f6f4ff"><div class="bar"><i></i><i></i><i></i></div>
-            <div style="padding:18px;color:#2b2550"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font:500 15px var(--f-display);letter-spacing:-.04em">GMIM Imanuel Talawaan</b><span style="font-size:11px;color:#7a74a8" data-i18n="m.nav">Beranda · Warta · Jadwal</span></div>
-              <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-top:16px"><div style="height:120px;border-radius:12px;background:linear-gradient(135deg,#4b3aa8,#a596ff);padding:14px;color:#fff;font:500 15px var(--f-display);letter-spacing:-.04em"><span data-i18n="m.warta">Warta Jemaat</span><br><span style="font:400 10px var(--f-body);opacity:.85" data-i18n="m.week">Minggu ini</span></div><div style="height:120px;border-radius:12px;background:#ebe7fb;padding:12px;font-size:11px;font-weight:600"><span data-i18n="m.service">Ibadah</span><br><b style="font:500 24px var(--f-display);letter-spacing:-.05em">07.00</b></div><div style="height:120px;border-radius:12px;background:#ebe7fb;padding:12px;font-size:11px;font-weight:600"><span data-i18n="m.group">Kolom</span><br><b style="font:500 24px var(--f-display);letter-spacing:-.05em">12</b></div></div></div></div>
-          <div class="float" style="right:8%;top:8%"><div class="chip"><span class="d" style="background:#25D366">✓</span><span data-i18n="m.chip1">Warta baru terbit</span></div></div>
-        </div><div class="big">01</div></div>
+<section class="sec" id="karya">
+  <div class="wrap">
+    <div class="head rv"><div><div class="eyebrow mono" data-i18n="w.eyebrow">Karya pilihan</div><h2 class="h" data-i18n="w.title">Proyek nyata yang <em>sudah berjalan</em></h2></div><p data-i18n="w.lead">Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai. Klik gambar untuk membuka situsnya.</p></div>
+    <div class="stack">
+      <article class="stk" style="--i:0">
+        <a class="shotwrap" href="https://imanueltalawaan.xyz/" target="_blank" rel="noopener" data-i18n-aria="a.p1">
+          <div class="bf"><div class="bar"><i></i><i></i><i></i><span class="url">https://imanueltalawaan.xyz</span></div><img src="karya/gmim-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p1d"></div>
+          <div class="phn"><img src="karya/gmim-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
+        </a>
+        <div class="info"><div class="big">01</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
+          <h3>E-Pelayanan Jemaat<br>GMIM Imanuel Talawaan</h3><div class="dom">imanueltalawaan.xyz</div>
+          <p data-i18n="w.p1">Portal pelayanan jemaat: keuangan, pemetaan data jemaat lewat sensus, warta, dan jadwal ibadah dalam satu tempat.</p>
+          <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">Tailwind</span></div>
+          <a class="go" href="https://imanueltalawaan.xyz/" target="_blank" rel="noopener"><span data-i18n="w.visit">Kunjungi situs</span> <i>↗</i></a></div>
       </article>
-
-      <article class="panel">
-        <div class="pinfo"><div class="idx mono"><span class="badge" data-i18n="w.demo">Konsep demo</span><span>02 / 04</span></div>
-          <h3 data-i18n="w.cake">Website Toko Kue</h3><p data-i18n="w.cakep">Katalog kue dengan pre-order Natal dan tombol pesan langsung ke WhatsApp.</p>
-          <div class="tags"><span class="tag" data-i18n="w.t.cat">Katalog</span><span class="tag">Pre-order</span><span class="tag">WhatsApp</span></div>
-          <a class="vlink" data-wa-msg="cake" href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="w.similar">Minta yang serupa</span> <i>↗</i></a></div>
-        <div class="vis"><div class="vin">
-          <div class="phone" style="left:50%;margin-left:-100px;top:9%;width:200px;height:80%;padding:16px 13px;color:#3a2a2a">
-            <div style="font:500 17px var(--f-display);letter-spacing:-.05em;color:#c2416b">Dapur Manis</div><div style="font-size:10px;color:#a98;margin-bottom:10px" data-i18n="m.cake">Pre-order Kue Natal</div>
-            <div style="height:110px;border-radius:14px;background:radial-gradient(circle at 50% 62%,#f7c6d4 34%,#fde8ee 35%)"></div>
-            <div style="font-weight:700;font-size:13px;margin:10px 0 2px">Kue Lapis Legit</div><div style="font-weight:600;font-size:11px;color:#c2416b">Rp 250.000</div>
-            <div style="margin-top:10px;background:#25D366;color:#fff;font-weight:700;font-size:11px;border-radius:10px;padding:9px;text-align:center" data-i18n="m.order">Pesan via WhatsApp</div></div>
-          <div class="float b" style="left:5%;top:20%"><div class="chip"><span class="d" style="background:#FF6B4A">★</span><span data-i18n="m.chip2">Pesanan baru masuk</span></div></div>
-          <div class="float" style="right:6%;bottom:18%"><div class="chip" style="flex-direction:column;align-items:flex-start;gap:0"><span style="font:500 10px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.6" data-i18n="m.cat">Katalog</span><b style="font:500 28px var(--f-display);letter-spacing:-.05em">24</b><span style="font-size:11px;opacity:.7" data-i18n="m.cakes">jenis kue</span></div></div>
-        </div><div class="big">02</div></div>
+      <article class="stk" style="--i:1">
+        <a class="shotwrap" href="https://absentuama.ai.studio/" target="_blank" rel="noopener" data-i18n-aria="a.p2">
+          <div class="bf"><div class="bar"><i></i><i></i><i></i><span class="url">https://absentuama.ai.studio</span></div><img src="karya/absen-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p2d"></div>
+          <div class="phn"><img src="karya/absen-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
+        </a>
+        <div class="info"><div class="big">02</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
+          <h3>Absensi BASARNAS<br>Sulawesi Utara</h3><div class="dom">absentuama.ai.studio</div>
+          <p data-i18n="w.p2">Presensi pegawai Kantor SAR Manado dengan geolokasi, selfie, pengenalan wajah, dan laporan real-time.</p>
+          <div class="tags"><span class="tag" data-i18n="w.t.geo">Geolokasi</span><span class="tag" data-i18n="w.t.face">Pengenalan wajah</span><span class="tag">React</span><span class="tag">Firebase</span></div>
+          <a class="go" href="https://absentuama.ai.studio/" target="_blank" rel="noopener"><span data-i18n="w.visit">Kunjungi situs</span> <i>↗</i></a></div>
       </article>
-
-      <article class="panel">
-        <div class="pinfo"><div class="idx mono"><span class="badge" data-i18n="w.demo">Konsep demo</span><span>03 / 04</span></div>
-          <h3 data-i18n="w.church">Website Gereja</h3><p data-i18n="w.churchp">Jadwal ibadah, warta jemaat, dan galeri kegiatan yang mudah dibuka jemaat lewat HP.</p>
-          <div class="tags"><span class="tag" data-i18n="w.t.sched">Jadwal Ibadah</span><span class="tag" data-i18n="w.t.news">Warta</span><span class="tag" data-i18n="w.t.gal">Galeri</span></div>
-          <a class="vlink" data-wa-msg="church" href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="w.similar">Minta yang serupa</span> <i>↗</i></a></div>
-        <div class="vis"><div class="vin">
-          <div class="win" style="left:10%;top:13%;width:82%;height:74%;background:#fbfaf6"><div class="bar"><i></i><i></i><i></i></div>
-            <div style="height:46%;background:linear-gradient(0deg,rgba(23,58,55,.9),rgba(23,58,55,.3)),linear-gradient(135deg,#d9b46a,#8a6b3a);padding:20px;color:#fff;font:500 22px var(--f-display);letter-spacing:-.05em"><span data-i18n="m.welcome">Selamat Datang</span><br><span style="font:400 11px var(--f-body);opacity:.9;letter-spacing:0" data-i18n="m.svc2">Ibadah Minggu · 07.00 &amp; 10.00</span></div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px"><div style="height:70px;border-radius:10px;background:#e9e4d6"></div><div style="height:70px;border-radius:10px;background:#e9e4d6"></div><div style="height:70px;border-radius:10px;background:#e9e4d6"></div></div></div>
-          <div class="float b" style="right:4%;bottom:12%"><div class="chip" style="flex-direction:column;align-items:stretch;gap:2px;min-width:170px;font-size:12px"><b style="font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.6" data-i18n="m.sched">Jadwal Minggu</b><span style="display:flex;justify-content:space-between"><span data-i18n="m.s1">Ibadah Pagi</span><b>07.00</b></span><span style="display:flex;justify-content:space-between"><span data-i18n="m.s2">Ibadah Siang</span><b>10.00</b></span></div></div>
-        </div><div class="big">03</div></div>
+      <article class="stk" style="--i:2">
+        <a class="shotwrap" href="https://tunankreatif.netlify.app/" target="_blank" rel="noopener" data-i18n-aria="a.p3">
+          <div class="bf"><div class="bar"><i></i><i></i><i></i><span class="url">https://tunankreatif.netlify.app</span></div><img src="karya/tunan-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p3d"></div>
+          <div class="phn"><img src="karya/tunan-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
+        </a>
+        <div class="info"><div class="big">03</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
+          <h3>Tunan Kreatif</h3><div class="dom">tunankreatif.netlify.app</div>
+          <p data-i18n="w.p3">Situs studio kreatif Minahasa Utara untuk videografi, konten digital, branding, dan promosi daerah, lengkap dengan portofolio dan permintaan penawaran.</p>
+          <div class="tags"><span class="tag" data-i18n="w.t.video">Videografi</span><span class="tag" data-i18n="w.t.digital">Konten digital</span><span class="tag" data-i18n="w.t.static">Situs statis</span></div>
+          <a class="go" href="https://tunankreatif.netlify.app/" target="_blank" rel="noopener"><span data-i18n="w.visit">Kunjungi situs</span> <i>↗</i></a></div>
       </article>
-
-      <article class="panel">
-        <div class="pinfo"><div class="idx mono"><span class="badge" data-i18n="w.brandb">Branding</span><span>04 / 04</span></div>
-          <h3 data-i18n="w.brand">Identitas Brand CRP</h3><p data-i18n="w.brandp">Logo, kartu nama dengan QR WhatsApp, dan aset media sosial dalam satu sistem warna.</p>
-          <div class="tags"><span class="tag">Logo</span><span class="tag" data-i18n="w.t.card">Kartu Nama</span><span class="tag" data-i18n="w.t.soc">Media Sosial</span></div></div>
-        <div class="vis"><div class="vin">
-          <div class="float" style="left:8%;top:16%;width:62%"><div style="aspect-ratio:1.65;border-radius:14px;background:#1B2A4A;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;transform:rotate(-7deg);box-shadow:0 40px 70px -10px rgba(0,0,0,.65)"><div style="font:800 clamp(34px,5vw,60px)/1 var(--f-body);letter-spacing:-.07em"><span style="color:#FF6B4A">&lt;</span>crp<span style="color:#FF6B4A">/&gt;</span><div style="font:500 clamp(7px,.9vw,10px) var(--f-body);letter-spacing:.34em;color:#C9CFDB;text-align:center;margin-top:8px" data-i18n="m.tag">DESAIN &amp; WEBSITE</div></div></div></div>
-          <div class="float b" style="right:6%;bottom:12%;width:56%"><div style="aspect-ratio:1.65;border-radius:12px;background:#fff;color:#1B2A4A;transform:rotate(6deg);border-left:8px solid #FF6B4A;padding:5%;box-shadow:0 40px 70px -10px rgba(0,0,0,.65)"><b style="font:500 clamp(13px,1.6vw,19px) var(--f-display);letter-spacing:-.05em">Christian</b><div style="font:700 clamp(6px,.7vw,8px) var(--f-body);color:#FF6B4A;letter-spacing:.1em;margin:3px 0 8px" data-i18n="m.role">DESAINER &amp; PEMBUAT WEBSITE</div><div style="font-size:clamp(7px,.85vw,10px);line-height:1.8;font-weight:500">WA 0895-3369-24576<br>IG @crp.works<br>crp.workss@gmail.com</div></div></div>
-        </div><div class="big">04</div></div>
+      <article class="stk" style="--i:3">
+        <div class="shotwrap">
+          <div class="bf brandf"><div class="bd">
+            <div class="float" style="left:5%;top:11%;width:52%"><div style="aspect-ratio:1.65;border-radius:14px;background:#1B2A4A;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;transform:rotate(-7deg);box-shadow:0 40px 70px -10px rgba(0,0,0,.65)"><div style="font:800 clamp(30px,5vw,64px)/1 var(--f-body);letter-spacing:-.07em"><span style="color:#FF6B4A">&lt;</span>crp<span style="color:#FF6B4A">/&gt;</span><div style="font:500 clamp(6px,.9vw,10px) var(--f-body);letter-spacing:.34em;color:#C9CFDB;text-align:center;margin-top:8px" data-i18n="m.tag">DESAIN &amp; WEBSITE</div></div></div></div>
+            <div class="float b" style="right:3%;bottom:7%;width:42%"><div style="aspect-ratio:1.65;border-radius:12px;background:#fff;color:#1B2A4A;transform:rotate(6deg);border-left:8px solid #FF6B4A;padding:5%;box-shadow:0 40px 70px -10px rgba(0,0,0,.65)"><b style="font:500 clamp(12px,1.6vw,19px) var(--f-display);letter-spacing:-.05em">Christian</b><div style="font:700 clamp(5px,.7vw,8px) var(--f-body);color:#FF6B4A;letter-spacing:.1em;margin:3px 0 8px" data-i18n="m.role">DESAINER &amp; PEMBUAT WEBSITE</div><div style="font-size:clamp(6px,.85vw,10px);line-height:1.8;font-weight:500">WA 0895-3369-24576<br>IG @crp.works<br>crp.workss@gmail.com</div></div></div>
+          </div></div>
+        </div>
+        <div class="info"><div class="big">04</div><div class="mono badge brand" data-i18n="w.brandb">Branding</div>
+          <h3 data-i18n="w.brand">Identitas Brand CRP</h3>
+          <p data-i18n="w.brandp">Logo, kartu nama dengan QR WhatsApp, dan aset media sosial dalam satu sistem warna.</p>
+          <div class="tags"><span class="tag">Logo</span><span class="tag" data-i18n="w.t.card">Kartu Nama</span><span class="tag" data-i18n="w.t.soc">Media Sosial</span></div>
+          <a class="go" data-wa-msg="brand" href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="w.similar">Minta yang serupa</span> <i>↗</i></a></div>
       </article>
     </div>
+    <div class="cta-card rv"><h3 data-i18n="w.next">Proyek <em>Anda</em> bisa jadi yang berikutnya</h3><a class="btn coral mag" data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="nav.cta">Chat WhatsApp</span><span class="arr">→</span></a></div>
   </div>
 </section>
 
@@ -574,19 +566,11 @@ footer a:hover{color:#fff}
 
   /* ---------- scroll driven ---------- */
   var nav = $('nav'), sprog = $('sprog'), fab = $('fab'), hero = $('hero'), kontak = $('kontak'), mega = $('mega');
-  var wsec = document.querySelector('.works'), wtrack = $('wtrack'), panels = [].slice.call(document.querySelectorAll('.panel'));
   var tl = $('tl'), sts = [].slice.call(document.querySelectorAll('.st')), cta = $('cta');
-  var pinOn = false;
-  function calcPin(){ pinOn = innerWidth > 900 && !reduce; if(!pinOn){ wtrack.style.transform = ''; panels.forEach(function(p){ p.style.setProperty('--act', 1); p.querySelector('.vin').style.transform = ''; }); } }
   function onScroll(){
     sy = window.scrollY; vh = innerHeight; vw = innerWidth;
     nav.classList.toggle('s', sy > 20);
     var doc = document.documentElement.scrollHeight - vh; sprog.style.setProperty('--sp', clamp(sy / doc, 0, 1).toFixed(4));
-    if(pinOn){
-      var r = wsec.getBoundingClientRect(), total = wsec.offsetHeight - vh, p = clamp(-r.top / total, 0, 1), max = Math.max(0, wtrack.scrollWidth - vw);
-      wtrack.style.transform = 'translate3d(' + (-p * max).toFixed(1) + 'px,0,0)';
-      panels.forEach(function(pn){ var b = pn.getBoundingClientRect(), c = (b.left + b.width / 2 - vw / 2) / vw; pn.style.setProperty('--act', (1 - Math.min(1, Math.abs(c) * 1.1)).toFixed(3)); pn.querySelector('.vin').style.transform = 'translate3d(' + (-c * 70).toFixed(1) + 'px,0,0)'; });
-    }
     // timeline
     var tr = tl.getBoundingClientRect(), tp = clamp((vh * .62 - tr.top) / tr.height, 0, 1);
     tl.style.setProperty('--tp', tp.toFixed(4));
@@ -603,7 +587,7 @@ footer a:hover{color:#fff}
   }
   var tickS = false;
   window.addEventListener('scroll', function(){ if(!tickS){ tickS = true; requestAnimationFrame(function(){ tickS = false; onScroll(); }); } }, {passive:true});
-  window.addEventListener('resize', function(){ vw = innerWidth; vh = innerHeight; sizeG(); sizeW(); buildG(); calcPin(); onScroll(); });
+  window.addEventListener('resize', function(){ vw = innerWidth; vh = innerHeight; sizeG(); sizeW(); buildG(); onScroll(); });
 
   /* reveal */
   var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ var t = e.target; t.classList.remove('pending'); io.unobserve(t); setTimeout(function(){ t.classList.remove('rv'); t.style.transitionDelay = ''; }, 1300); } }); }, {threshold:.12}) : null;
@@ -646,15 +630,13 @@ footer a:hover{color:#fff}
       'hero.lead':'CRP membantu toko, warung, dan gereja di Manado tampil profesional di internet, dari logo dan menu sampai website lengkap.',
       'hero.cta1':'Lihat Karya','hero.cta2':'Konsultasi Gratis',
       'pr.1a':'1–2 minggu','pr.1b':'Website selesai','pr.2a':'2× revisi','pr.2b':'Sudah termasuk','pr.3a':'Gratis','pr.3b':'Konsultasi awal',
-      'w.eyebrow':'Karya pilihan','w.title':'Proyek yang sudah <em>kami kerjakan</em>','w.lead':'Dari aplikasi jemaat sampai identitas brand. Setiap proyek dibuat supaya mudah dipakai dan enak dilihat.',
-      'w.real':'Proyek nyata','w.demo':'Konsep demo','w.brandb':'Branding','w.open':'Buka proyek','w.similar':'Minta yang serupa',
-      'w.gmim':'Aplikasi web untuk jemaat: warta, jadwal ibadah, dan informasi kolom dalam satu tempat.','w.t.app':'Aplikasi Web Jemaat',
-      'w.cake':'Website Toko Kue','w.cakep':'Katalog kue dengan pre-order Natal dan tombol pesan langsung ke WhatsApp.','w.t.cat':'Katalog',
-      'w.church':'Website Gereja','w.churchp':'Jadwal ibadah, warta jemaat, dan galeri kegiatan yang mudah dibuka jemaat lewat HP.','w.t.sched':'Jadwal Ibadah','w.t.news':'Warta','w.t.gal':'Galeri',
+      'w.eyebrow':'Karya pilihan','w.title':'Proyek nyata yang <em>sudah berjalan</em>','w.lead':'Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai. Klik gambar untuk membuka situsnya.',
+      'w.real':'Proyek nyata','w.brandb':'Branding','w.visit':'Kunjungi situs','w.similar':'Minta yang serupa','w.next':'Proyek <em>Anda</em> bisa jadi yang berikutnya',
+      'w.p1':'Portal pelayanan jemaat: keuangan, pemetaan data jemaat lewat sensus, warta, dan jadwal ibadah dalam satu tempat.','w.p2':'Presensi pegawai Kantor SAR Manado dengan geolokasi, selfie, pengenalan wajah, dan laporan real-time.','w.p3':'Situs studio kreatif Minahasa Utara untuk videografi, konten digital, branding, dan promosi daerah, lengkap dengan portofolio dan permintaan penawaran.',
+      'w.t.geo':'Geolokasi','w.t.face':'Pengenalan wajah','w.t.video':'Videografi','w.t.digital':'Konten digital','w.t.static':'Situs statis',
       'w.brand':'Identitas Brand CRP','w.brandp':'Logo, kartu nama dengan QR WhatsApp, dan aset media sosial dalam satu sistem warna.','w.t.card':'Kartu Nama','w.t.soc':'Media Sosial',
-      'm.nav':'Beranda · Warta · Jadwal','m.warta':'Warta Jemaat','m.week':'Minggu ini','m.service':'Ibadah','m.group':'Kolom','m.chip1':'Warta baru terbit',
-      'm.cake':'Pre-order Kue Natal','m.order':'Pesan via WhatsApp','m.chip2':'Pesanan baru masuk','m.cat':'Katalog','m.cakes':'jenis kue',
-      'm.welcome':'Selamat Datang','m.svc2':'Ibadah Minggu · 07.00 &amp; 10.00','m.sched':'Jadwal Minggu','m.s1':'Ibadah Pagi','m.s2':'Ibadah Siang',
+      'a.p1':'Buka portal E-Pelayanan Jemaat GMIM Imanuel Talawaan','a.p2':'Buka aplikasi Absensi BASARNAS Sulawesi Utara','a.p3':'Buka situs Tunan Kreatif',
+      'a.p1d':'Halaman utama E-Pelayanan Jemaat GMIM Imanuel Talawaan','a.p2d':'Halaman login Absensi BASARNAS Sulawesi Utara','a.p3d':'Halaman utama Tunan Kreatif','a.phone':'Tampilan di HP',
       'm.tag':'DESAIN &amp; WEBSITE','m.role':'DESAINER &amp; PEMBUAT WEBSITE',
       's.eyebrow':'Layanan','s.title':'Apa yang bisa <em>kami bantu</em>','s.lead':'Paket jelas dan harga terbuka. Klien pertama mendapat harga perkenalan.',
       's.1t':'Logo &amp; Branding','s.1p':'Identitas visual yang mudah diingat, siap untuk cetak dan media sosial.','s.2t':'Website Usaha','s.2p':'Katalog, profil usaha, atau website gereja dengan tombol pesan via WhatsApp.','s.3t':'Menu Digital QR','s.3p':'Pelanggan scan QR di meja dan langsung melihat menu Anda.','s.4t':'Konten Instagram','s.4p':'Desain feed dan story yang rapi dan konsisten dengan brand Anda.','s.from':'Mulai dari','s.10':'Paket 10 desain',
@@ -664,7 +646,7 @@ footer a:hover{color:#fff}
       'c.title':'Punya usaha? Ayo bikin <em>tampil beda.</em>','c.lead':'Konsultasi gratis. Balasan cepat setelah jam kerja dan di akhir pekan.','c.copy':'Salin','c.copied':'Tersalin','c.scan':'Scan untuk chat','fab.tip':'Tanya-tanya dulu, gratis',
       't.eyebrow':'Kata klien','t.title':'Mereka sudah <em>mencoba</em>',
       marquee:['LOGO','MENU','FEED INSTAGRAM','WEBSITE','MENU DIGITAL QR','BRANDING'],
-      msg:{def:'Halo, saya mau tanya jasa CRP',cake:'Halo, saya tertarik dibuatkan website toko kue seperti di portofolio CRP',church:'Halo, saya tertarik dibuatkan website gereja seperti di portofolio CRP'},
+      msg:{def:'Halo, saya mau tanya jasa CRP',brand:'Halo, saya tertarik dibuatkan identitas brand seperti di portofolio CRP'},
       qrAlt:'QR code WhatsApp CRP'
     },
     en:{
@@ -675,15 +657,13 @@ footer a:hover{color:#fff}
       'hero.lead':'CRP helps shops, eateries, and churches in Manado look professional online, from logos and menus to complete websites.',
       'hero.cta1':'See the Work','hero.cta2':'Free Consultation',
       'pr.1a':'1–2 weeks','pr.1b':'Website delivered','pr.2a':'2 revisions','pr.2b':'Included','pr.3a':'Free','pr.3b':'First consultation',
-      'w.eyebrow':'Selected work','w.title':'Projects we have <em>built</em>','w.lead':'From a church app to a brand identity. Every project is made to be easy to use and good to look at.',
-      'w.real':'Real project','w.demo':'Demo concept','w.brandb':'Branding','w.open':'Open project','w.similar':'Request something similar',
-      'w.gmim':'A web app for the congregation: announcements, service times, and group info in one place.','w.t.app':'Church Web App',
-      'w.cake':'Cake Shop Website','w.cakep':'A cake catalog with Christmas pre-orders and a button that opens WhatsApp.','w.t.cat':'Catalog',
-      'w.church':'Church Website','w.churchp':'Service times, announcements, and an event gallery that members open easily on their phones.','w.t.sched':'Service Times','w.t.news':'News','w.t.gal':'Gallery',
+      'w.eyebrow':'Selected work','w.title':'Real projects <em>already running</em>','w.lead':'Systems and sites in daily use, from a congregation portal to staff attendance. Click an image to open the site.',
+      'w.real':'Real project','w.brandb':'Branding','w.visit':'Visit site','w.similar':'Request something similar','w.next':'Your project could be <em>next</em>',
+      'w.p1':'A congregation service portal: finances, census-based member mapping, bulletins, and service times in one place.','w.p2':'Staff attendance for the SAR Manado office with geolocation, selfies, face recognition, and real-time reports.','w.p3':'Website for a North Minahasa creative studio: videography, digital content, branding, and regional promotion, with a portfolio and quote requests.',
+      'w.t.geo':'Geolocation','w.t.face':'Face recognition','w.t.video':'Videography','w.t.digital':'Digital content','w.t.static':'Static site',
       'w.brand':'CRP Brand Identity','w.brandp':'Logo, a business card with a WhatsApp QR code, and social media assets in one color system.','w.t.card':'Business Card','w.t.soc':'Social Media',
-      'm.nav':'Home · News · Schedule','m.warta':'Congregation News','m.week':'This week','m.service':'Service','m.group':'Group','m.chip1':'New bulletin posted',
-      'm.cake':'Christmas Cake Pre-order','m.order':'Order via WhatsApp','m.chip2':'New order received','m.cat':'Catalog','m.cakes':'cake types',
-      'm.welcome':'Welcome','m.svc2':'Sunday Service · 07.00 &amp; 10.00','m.sched':'Sunday Times','m.s1':'Morning Service','m.s2':'Midday Service',
+      'a.p1':'Open the GMIM Imanuel Talawaan congregation portal','a.p2':'Open the BASARNAS North Sulawesi attendance app','a.p3':'Open the Tunan Kreatif website',
+      'a.p1d':'Home page of the GMIM Imanuel Talawaan congregation portal','a.p2d':'Login page of the BASARNAS North Sulawesi attendance app','a.p3d':'Home page of Tunan Kreatif','a.phone':'Phone view',
       'm.tag':'DESIGN &amp; WEBSITE','m.role':'DESIGNER &amp; WEBSITE BUILDER',
       's.eyebrow':'Services','s.title':'How we can <em>help</em>','s.lead':'Clear packages and open pricing. First clients get an introductory price.',
       's.1t':'Logo &amp; Branding','s.1p':'A memorable visual identity, ready for print and social media.','s.2t':'Business Website','s.2p':'A catalog, business profile, or church website with a WhatsApp order button.','s.3t':'QR Digital Menu','s.3p':'Customers scan a QR code at the table and see your menu instantly.','s.4t':'Instagram Content','s.4p':'Feed and story designs that stay tidy and on-brand.','s.from':'Starting at','s.10':'10-design pack',
@@ -693,7 +673,7 @@ footer a:hover{color:#fff}
       'c.title':'Have a business? Let’s make it <em>stand out.</em>','c.lead':'Free consultation. Quick replies after office hours and on weekends.','c.copy':'Copy','c.copied':'Copied','c.scan':'Scan to chat','fab.tip':'Ask us anything, it’s free',
       't.eyebrow':'Client words','t.title':'What clients <em>say</em>',
       marquee:['LOGOS','MENUS','INSTAGRAM FEEDS','WEBSITES','QR DIGITAL MENUS','BRANDING'],
-      msg:{def:"Hi, I'd like to ask about CRP services",cake:"Hi, I'm interested in a cake shop website like the one in CRP's portfolio",church:"Hi, I'm interested in a church website like the one in CRP's portfolio"},
+      msg:{def:"Hi, I'd like to ask about CRP services",brand:"Hi, I'm interested in a brand identity like the one in CRP's portfolio"},
       qrAlt:'WhatsApp QR code for CRP'
     }
   };
@@ -711,6 +691,8 @@ footer a:hover{color:#fff}
   function apply(l){
     var d = T[l]; lang = l; document.documentElement.lang = l;
     [].slice.call(document.querySelectorAll('[data-i18n]')).forEach(function(el){ var v = d[el.getAttribute('data-i18n')]; if(v != null) el.innerHTML = v; });
+    [].slice.call(document.querySelectorAll('[data-i18n-alt]')).forEach(function(el){ var v = d[el.getAttribute('data-i18n-alt')]; if(v != null) el.setAttribute('alt', v); });
+    [].slice.call(document.querySelectorAll('[data-i18n-aria]')).forEach(function(el){ var v = d[el.getAttribute('data-i18n-aria')]; if(v != null) el.setAttribute('aria-label', v); });
     buildH1(d); words = d.marquee; fillMq($('mq1'), 0); fillMq($('mq2'), 1); waLinks(d);
     var qi = $('qrimg'); qi.src = 'data:image/png;base64,' + QR[l]; qi.alt = d.qrAlt;
     var sw = $('lang'); sw.setAttribute('data-lang', l);
@@ -742,7 +724,7 @@ footer a:hover{color:#fff}
   }
   apply(lang);
 
-  sizeG(); sizeW(); buildG(); calcPin(); onScroll();
+  sizeG(); sizeW(); buildG(); onScroll();
   if(reduce){ drawG(2000); drawW(); } else { requestAnimationFrame(loop); }
 })();
 </script>
