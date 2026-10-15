@@ -13,190 +13,374 @@
 <title>CRP Works</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800;900&family=Unbounded:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800;900&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* ===================================================================
-   SITE (sections after the hero). Stacked work cards, glass service cards that glow under the cursor, a lit timeline
-   that draws with scroll and a warp-speed field closing the page. Palette is the logo's: navy, coral, white, silver.
-   The preloader, nav, hero and custom cursor are the "Spark" block further down (second <style>).
+   SITE: everything below the hero, in the Spark language.
+   Layout: one framed column for the whole page. Hairline frame at the HUD-bracket inset (24px),
+   content at the nav inset (24 + 40 = 64px). Each section opens on a full-bleed rule with "+" marks
+   (the hero's crosshairs) and a mono readout row, then an Inter 800 headline that lands on the coral dot.
+   Colour: navy-900 ground, navy-800 panels, white type, coral only for spark / action / state.
+   Type: Inter 800 display, Inter 400-500 body, JetBrains Mono 10.5-11px uppercase .12em labels.
+   The preloader, nav, hero and cursor are the "Spark" block further down (second <style>).
    =================================================================== */
 :root{
-  --bg:#0A1220; --navy:#1B2A4A; --navy-2:#22345A; --coral:#FF6B4A; --white:#FFFFFF; --silver:#C9CFDB;
-  --dim:rgba(201,207,219,.74); --line:rgba(201,207,219,.16); --glass:rgba(34,52,90,.45);
-  --f-display:'Unbounded','Hanken Grotesk',system-ui,sans-serif;
-  --f-serif:'Instrument Serif',Georgia,'Times New Roman',serif;
-  --f-body:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --f-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
-  --gutter:clamp(18px,5vw,84px);
+  --bg:#141F38;                       /* = navy-900; the hero seam fades into this */
+  --ink:#FFFFFF;
+  --ink-2:rgba(255,255,255,.64);
+  --ink-3:rgba(255,255,255,.44);
+  --rule:rgba(255,255,255,.10);
+  --rule-2:rgba(255,255,255,.20);
+  --panel-a:#1F2E52; --panel-b:#172341;
+  --fx:24px;                          /* frame line inset */
+  --px:40px;                          /* content inset inside the frame */
+  --maxw:1440px;
+  --sy:clamp(96px,10vw,152px);        /* space after a section's content */
   color-scheme:dark;
 }
 @property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--white);font:400 17px/1.6 var(--f-body);overflow-x:hidden}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-:focus-visible{outline:2px solid var(--coral);outline-offset:4px;border-radius:8px}
-[tabindex="-1"]:focus{outline:none}   /* sections focused by the anchor scroll (a11y) get no ring */
-.wrap{padding-inline:var(--gutter);max-width:1520px;margin-inline:auto}
-h1,h2,h3,h4{font-family:var(--f-display);font-weight:300;margin:0;text-wrap:balance}
-em{font-family:var(--f-serif);font-style:italic;font-weight:400;color:var(--coral);letter-spacing:-.01em}
-.mono{font:500 11.5px var(--f-mono);letter-spacing:.16em;text-transform:uppercase}
-.eyebrow{display:inline-flex;align-items:center;gap:12px;color:var(--coral);margin-bottom:22px}
-.eyebrow:before{content:'';width:34px;height:1px;background:var(--coral)}
+.sec ::selection,.ft ::selection{background:var(--coral);color:#fff}
+.sec :focus-visible,.ft :focus-visible,.fab :focus-visible,.mqs :focus-visible{outline:2px solid var(--coral);outline-offset:4px;border-radius:2px}
+[tabindex="-1"]:focus{outline:none}
+.mono{font:400 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+
+/* frame + rules */
+.fr{position:relative;width:calc(100% - 2 * var(--fx));max-width:var(--maxw);margin-inline:auto}
+.fr::before,.fr::after{content:"";position:absolute;top:0;bottom:0;width:1px;background:var(--rule);pointer-events:none}
+.fr::before{left:0}.fr::after{right:0}
+.in{padding-inline:var(--px)}
+.rule{position:absolute;top:0;left:50%;width:100vw;margin-left:-50vw;height:1px;pointer-events:none}
+.rule>b{position:absolute;inset:0;background:var(--rule);transform-origin:0 50%}
+.xm{position:absolute;top:0;width:11px;height:11px;margin:-5px 0 0 -5px;pointer-events:none}
+.xm::before,.xm::after{content:"";position:absolute;background:rgba(255,255,255,.55)}
+.xm::before{left:5px;top:0;width:1px;height:11px}
+.xm::after{left:0;top:5px;width:11px;height:1px}
+.xm-l{left:0}.xm-r{left:100%}
 
 /* overlays */
-.grain{position:fixed;inset:0;z-index:95;pointer-events:none;opacity:0;transition:opacity .8s;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
-.prog{position:fixed;right:20px;top:50%;margin-top:-70px;width:2px;height:140px;background:var(--line);z-index:96;pointer-events:none;opacity:0;transition:opacity .6s}
+.grain{position:fixed;inset:0;z-index:95;pointer-events:none;opacity:0;transition:opacity .8s;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.6 -.35'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+body.after-hero .grain{opacity:.045}
+.prog{position:fixed;right:9px;top:50%;margin-top:-64px;width:1px;height:128px;background:var(--rule-2);z-index:96;pointer-events:none;opacity:0;transition:opacity .6s}
 body.after-hero .prog{opacity:1}
-body.after-hero .grain{opacity:.07}
-.prog i{position:absolute;inset:0;background:var(--coral);transform-origin:top;transform:scaleY(var(--sp,0));box-shadow:0 0 12px var(--coral)}
-/* buttons */
-.btn{position:relative;display:inline-flex;align-items:center;gap:12px;padding:16px 28px;border-radius:999px;font:600 15px var(--f-body);overflow:hidden;isolation:isolate;cursor:pointer;white-space:nowrap;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
-.btn.coral{background:var(--coral);color:var(--bg);box-shadow:0 0 0 1px rgba(255,107,74,.6),0 14px 50px -10px rgba(255,107,74,.65)}
-.btn.coral:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);transform:translateX(-130%);transition:transform .9s}
-.btn.coral:hover:before{transform:translateX(130%)}
-.btn.coral:hover{box-shadow:0 0 0 1px rgba(255,107,74,.9),0 18px 70px -8px rgba(255,107,74,.85)}
-.btn.ghost{border:1px solid rgba(201,207,219,.34);color:#fff;background:rgba(255,255,255,.04);backdrop-filter:blur(8px)}
-.btn.ghost:hover{border-color:var(--coral);background:rgba(255,107,74,.08)}
-.btn .arr{transition:transform .3s}.btn:hover .arr{transform:translateX(5px)}
+.prog i{position:absolute;inset:0;background:var(--coral);transform-origin:top;transform:scaleY(var(--sp,0))}
 
-/* marquee (no top hairline: the hero fades into it) */
-.mqs{padding-block:clamp(40px,6vw,90px);overflow:hidden;border-bottom:1px solid var(--line);background:linear-gradient(180deg,transparent,rgba(27,42,74,.35),transparent)}
-.mq{overflow:hidden;white-space:nowrap;user-select:none}
-.mq+.mq{margin-top:6px}
-.mq .tr{display:inline-flex;will-change:transform}
-.mq span{font:300 clamp(40px,7.4vw,118px)/1.1 var(--f-display);letter-spacing:-.05em;padding-right:.5em;color:transparent;-webkit-text-stroke:1px rgba(201,207,219,.42)}
-.mq span.f{color:var(--coral);-webkit-text-stroke:0}
-.mq span.x{color:var(--coral);-webkit-text-stroke:0;font-family:var(--f-serif);font-style:italic}
+/* section scaffolding */
+.sec,.ft{position:relative;scroll-margin-top:var(--nav-h)}   /* native anchor fallback (no JS / no libraries) */
+.sec>.fr{padding-bottom:var(--sy)}
+.shd{position:relative;padding-top:18px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:8px 24px;flex-wrap:wrap;color:var(--ink-3)}
+.meta .lab{display:inline-flex;align-items:center;gap:10px;color:var(--ink)}
+.sq{display:block;flex:none;width:5px;height:5px;background:var(--coral)}
+.sq.bl{animation:crpBlink 1.1s steps(1) infinite}
+.shd-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,24em);gap:24px 64px;align-items:end;margin-top:clamp(56px,8vw,112px)}
+.sh{margin:0;font:800 clamp(36px,5.3vw,80px)/1.02 var(--font);letter-spacing:-.035em;text-wrap:balance}
+.sh>span{display:inline}
+.pd{position:relative;display:inline-block;width:.17em;height:.17em;margin-left:.05em;border-radius:50%;background:var(--coral);box-shadow:0 0 .2em rgba(255,107,74,.55);vertical-align:baseline}
+.lead{margin:0;color:var(--ink-2);font-size:clamp(16px,1.15vw,18px);line-height:1.6;max-width:30em;text-wrap:pretty}
+.sec-body{margin-top:clamp(48px,6vw,88px)}
 
-/* sections */
-.sec{padding-block:clamp(80px,11vw,150px);position:relative;scroll-margin-top:var(--nav-h)}
-h2.h{font-size:clamp(28px,4.2vw,64px);line-height:1.04;letter-spacing:-.045em}
-h2.h em{font-size:1.18em;letter-spacing:-.02em}
-.head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px 60px;flex-wrap:wrap;margin-bottom:56px}
-.head p{max-width:26em;margin:0;color:var(--dim)}
-.js .rv{transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
-.js .rv.pending{opacity:0;transform:translateY(46px)}
+/* ---------- marquee: ghost words + a mono tape ---------- */
+.mqs{position:relative;padding-block:clamp(20px,3vw,44px) clamp(48px,6vw,88px);overflow:hidden;user-select:none}
+.mq{overflow:hidden;white-space:nowrap}
+.mq .tr{display:inline-flex;align-items:center;will-change:transform}
+.mq-big span{font:900 clamp(46px,7.6vw,124px)/1.08 var(--font);letter-spacing:-.045em;color:rgba(255,255,255,.1);padding-right:.34em}
+.mq-big span.f{color:var(--ink)}
+.mq-big i{display:block;flex:none;width:.13em;height:.13em;border-radius:50%;background:var(--coral);margin-right:.34em;font-size:clamp(46px,7.6vw,124px);box-shadow:0 0 .2em rgba(255,107,74,.5)}
+.mq-tape{margin-top:clamp(16px,2vw,24px);border-block:1px solid var(--rule);padding-block:13px}
+.mq-tape span{font:400 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding-right:22px}
+.mq-tape span.x{color:var(--coral);padding-right:22px}
 
-/* works: stacked showcase */
-.stack{display:grid;gap:28px;padding-bottom:40px}
-.stk{position:sticky;top:calc(88px + var(--i)*24px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:clamp(22px,3.2vw,52px);align-items:center;border:1px solid var(--line);border-radius:32px;padding:clamp(18px,2.6vw,38px);background:linear-gradient(135deg,#1B2A4A,#0D182E);min-height:min(74vh,600px);box-shadow:0 -20px 50px -20px rgba(0,0,0,.6)}
-.shotwrap{position:relative;display:block;padding-bottom:4%}
-.bf{border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;background:#0E1A33;box-shadow:0 40px 80px -20px rgba(0,0,0,.7);transition:transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .6s}
-.bf .bar{display:flex;align-items:center;gap:7px;padding:0 12px;height:34px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.08)}
-.bf .bar i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2)}.bf .bar i:first-child{background:var(--coral)}
-.bf img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
-.phn{position:absolute;right:-2.5%;bottom:-2%;width:20%;border:5px solid #070d1a;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -10px rgba(0,0,0,.75);background:#000;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
-.phn img{display:block;width:100%;height:auto}
-.brandf .bd{position:relative;aspect-ratio:16/10;overflow:hidden;background:radial-gradient(90% 80% at 70% 20%,rgba(255,107,74,.2),transparent 60%),#1B2A4A}
-.brandf .bd:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,207,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(201,207,219,.07) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%);mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%)}
-.float{position:absolute;animation:bob 6s ease-in-out infinite}.float.b{animation-delay:-2.5s}
-@keyframes bob{50%{transform:translateY(-12px)}}
-.info .big{font:300 clamp(64px,9vw,128px)/.9 var(--f-display);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(201,207,219,.28)}
-.badge{display:inline-flex;align-items:center;gap:8px;color:#8ef0b5;margin-top:14px}
-.badge:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
-.badge.brand{color:var(--coral)}
-.info h3{font-size:clamp(22px,2.6vw,38px);line-height:1.06;letter-spacing:-.05em;margin:12px 0 8px}
-.info p{margin:0 0 18px;color:var(--dim);max-width:26em}
-.tags{display:flex;gap:8px;flex-wrap:wrap}
-.tag{font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--silver)}
-.cta-card{border:1px dashed rgba(255,107,74,.5);border-radius:32px;padding:clamp(26px,4vw,52px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;background:rgba(255,107,74,.05)}
-.cta-card h3{font-size:clamp(22px,2.8vw,38px);letter-spacing:-.045em;line-height:1.1}
-.cta-card h3 em{font-size:1.18em}
+/* ---------- spec bar (trust facts as instrument readouts) ---------- */
+.kp>.fr{padding-bottom:clamp(64px,7vw,104px)}
+.kp-g{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:clamp(36px,4.4vw,64px)}
+.bk{position:absolute;inset:0;pointer-events:none;--c:rgba(255,255,255,.55);--l:14px;
+  background:linear-gradient(var(--c),var(--c)) 0 0/var(--l) 1px,linear-gradient(var(--c),var(--c)) 0 0/1px var(--l),
+    linear-gradient(var(--c),var(--c)) 100% 0/var(--l) 1px,linear-gradient(var(--c),var(--c)) 100% 0/1px var(--l),
+    linear-gradient(var(--c),var(--c)) 0 100%/var(--l) 1px,linear-gradient(var(--c),var(--c)) 0 100%/1px var(--l),
+    linear-gradient(var(--c),var(--c)) 100% 100%/var(--l) 1px,linear-gradient(var(--c),var(--c)) 100% 100%/1px var(--l);
+  background-repeat:no-repeat}
+.kp-c{position:relative;display:flex;flex-direction:column;gap:14px;min-width:0;padding:clamp(24px,2.6vw,38px) clamp(20px,2.6vw,40px)}
+.kp-c+.kp-c::before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:1px;background:var(--rule)}
+.kp-l{color:var(--ink-2)}
+.kp-v{margin:6px 0 0;display:flex;align-items:baseline;gap:.2em;flex-wrap:wrap;font:800 clamp(44px,4.8vw,76px)/.95 var(--font);letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.kp-v small{font:500 clamp(16px,1.35vw,20px)/1 var(--font);letter-spacing:-.01em;color:var(--ink-2)}
+.kp-s{margin:0;color:var(--ink-2);font-size:15px}
+.kp-ins{margin-top:auto;padding-top:18px;min-height:52px;display:flex;flex-direction:column;justify-content:flex-end;gap:9px}
+.ticks{display:flex;align-items:flex-end;gap:4px;height:18px}
+.ticks i{flex:1;height:7px;background:rgba(255,255,255,.16);transform-origin:50% 100%}
+.ticks i.on{height:18px;background:rgba(255,255,255,.9)}
+.ticks i.on:last-child{background:var(--coral)}
+.revs{display:flex;gap:6px}
+.revs b{display:grid;place-items:center;width:46px;height:22px;border:1px solid rgba(255,255,255,.9);font:500 10px/1 var(--mono);letter-spacing:.1em;color:var(--ink)}
+.ins-cap{display:flex;justify-content:space-between;color:var(--ink-3);font-size:10.5px}
+.kp-cta{display:inline-flex;align-items:center;gap:10px;color:var(--coral);font:400 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:6px 0;width:max-content}
+.kp-cta svg{width:14px;height:14px;transition:transform .45s var(--ease)}
+.kp-cta:hover svg{transform:translateX(4px)}
+.kp-cta span{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .5s var(--ease);padding-bottom:3px}
+.kp-cta:hover span{background-size:100% 1px}
 
-/* services */
-.svc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;perspective:1200px}
-.sv{--mx:50%;--my:0%;position:relative;border-radius:24px;padding:30px;min-height:340px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(180deg,rgba(34,52,90,.55),rgba(27,42,74,.2));border:1px solid var(--line);overflow:hidden;transition:transform .25s ease-out;transform-style:preserve-3d}
-.sv:before{content:'';position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx) var(--my),rgba(255,107,74,.2),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
-.sv:after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:radial-gradient(240px circle at var(--mx) var(--my),var(--coral),transparent 62%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);opacity:0;transition:opacity .3s;pointer-events:none}
-.sv:hover:before,.sv:hover:after{opacity:1}
-.sv.hi{background:linear-gradient(180deg,rgba(255,107,74,.22),rgba(27,42,74,.35))}
-.sv.hi:after{opacity:1;background:conic-gradient(from var(--ang),transparent 55%,var(--coral) 80%,#fff 90%,transparent);animation:beam 5s linear infinite}
-@keyframes beam{to{--ang:360deg}}
-.sv .ic{width:56px;height:56px;border-radius:16px;border:1px solid var(--line);background:rgba(10,18,32,.5);display:grid;place-items:center;color:var(--coral);margin-bottom:16px}
-.sv .ic svg{overflow:visible}
-.sv h4{font-size:19px;line-height:1.15;letter-spacing:-.04em;font-weight:400}
-.sv p{margin:0;color:var(--dim);font-size:15px;line-height:1.55}
-.price{margin-top:auto;padding-top:20px;font:300 26px/1 var(--f-display);letter-spacing:-.05em}
-.price small{display:block;font:500 10.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
-.note{margin-top:26px;color:var(--dim);font-size:14.5px;max-width:48em}
-.ic .sp{transform-origin:center;animation:rot 9s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
-.ic .pl{animation:pul 2.4s ease-in-out infinite;transform-origin:center}@keyframes pul{50%{transform:scale(1.25);opacity:.6}}
-.ic .bl{animation:blk 2.2s steps(1) infinite}.ic .bl:nth-child(2){animation-delay:.5s}.ic .bl:nth-child(3){animation-delay:1.1s}@keyframes blk{50%{opacity:.25}}
+/* ---------- karya: case files ---------- */
+.cases{display:grid;gap:clamp(20px,2.2vw,32px)}
+.case{position:relative}
+.case-in{position:relative;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:clamp(28px,4vw,72px);align-items:center;
+  padding:clamp(18px,3.2vw,52px);border:1px solid var(--rule);background:linear-gradient(155deg,var(--panel-a) 0%,var(--panel-b) 62%,#152039 100%);
+  transform-origin:50% 0;box-shadow:0 -24px 60px -28px rgba(6,10,24,.9)}
+.case-in::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:32px 32px;
+  -webkit-mask-image:radial-gradient(70% 90% at 30% 50%,#000,transparent 72%);mask-image:radial-gradient(70% 90% at 30% 50%,#000,transparent 72%)}
+.case-dim{position:absolute;inset:-1px;background:#0D1528;opacity:0;pointer-events:none;z-index:3}
+.case-media{position:relative;padding:0 4% 7% 0;min-width:0}
+.bw{position:relative;margin:0;border:1px solid rgba(255,255,255,.15);border-radius:10px;overflow:hidden;background:#0F1930;box-shadow:0 50px 90px -34px rgba(4,8,20,.95)}
+.bw-bar{display:flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035)}
+.bw-bar i{width:7px;height:7px;border-radius:50%;border:1px solid rgba(255,255,255,.3)}
+.bw-bar .dim{margin-left:auto;color:var(--ink-3);font-size:10px}
+.bw-v{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0F1930}
+.bw-v img{display:block;width:100%;height:100%;object-fit:cover}
+.scan{position:absolute;inset:0;background:#132040;transform-origin:50% 100%;transform:scaleY(0);pointer-events:none}
+.scan-l{position:absolute;inset:0;border-top:1px solid var(--coral);opacity:0;pointer-events:none}
+.scan-l::after{content:"";position:absolute;left:0;right:0;top:-1px;height:28px;background:linear-gradient(rgba(255,107,74,.22),transparent)}
+.ph{position:absolute;right:0;bottom:0;width:23%;margin:0;padding:4px;border-radius:20px;background:#0A1224;border:1px solid rgba(255,255,255,.18);box-shadow:0 30px 60px -16px rgba(4,8,20,.9);z-index:2}
+.ph-v{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:360/779;background:#0F1930}
+.ph-v img{display:block;width:100%;height:100%;object-fit:cover}
+.ph-v::before{content:"";position:absolute;left:50%;top:5px;width:28%;height:5px;margin-left:-14%;border-radius:4px;background:#0A1224;z-index:1}
+.dims{position:absolute;left:0;bottom:0;display:flex;gap:18px;color:var(--ink-3);font-size:10px}
+.dims b{font-weight:400;color:var(--ink-2)}
+.case-info{position:relative;min-width:0}
+.case-top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--ink-3)}
+.stt{display:inline-flex;align-items:center;gap:10px;color:var(--ink)}
+.case-t{margin:22px 0 14px;font:800 clamp(26px,2.5vw,40px)/1.06 var(--font);letter-spacing:-.03em;text-wrap:balance}
+.case-p{margin:0 0 28px;color:var(--ink-2);font-size:15.5px;line-height:1.6;max-width:32em}
+.spec-t{margin:0;border-top:1px solid var(--rule-2)}
+.spec-t>div{display:grid;grid-template-columns:8.2em minmax(0,1fr);gap:16px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--rule)}
+.spec-t dt{color:var(--ink-3);font-size:10.5px}
+.spec-t dd{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;font:500 14.5px/1.5 var(--font);color:var(--ink);min-width:0}
+.spec-t dd span+span::before{content:"\00B7";margin:0 .55em;color:var(--ink-3)}
+/* brand artboard */
+.art{position:relative;aspect-ratio:16/10;border:1px solid rgba(255,255,255,.14);border-radius:10px;overflow:hidden;
+  background:radial-gradient(70% 80% at 72% 20%,rgba(58,80,132,.55),transparent 65%),#1A2848}
+.art::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:28px 28px;
+  -webkit-mask-image:radial-gradient(circle at 55% 45%,#000,transparent 78%);mask-image:radial-gradient(circle at 55% 45%,#000,transparent 78%)}
+.art-l{position:absolute;left:14px;top:12px;color:var(--ink-3);font-size:10px}
+.fl{position:absolute;animation:bob 6s ease-in-out infinite}.fl.b{animation-delay:-2.5s}
+@keyframes bob{50%{transform:translateY(-10px)}}
+.card-logo{aspect-ratio:1.65;display:grid;place-items:center;background:#1C2A4A;border:1px solid rgba(255,255,255,.16);border-radius:12px;transform:rotate(-7deg);box-shadow:0 40px 70px -14px rgba(4,8,20,.8)}
+.card-logo b{display:block;font:800 clamp(26px,4.4vw,60px)/1 var(--font);letter-spacing:-.06em;text-align:center}
+.card-logo b i{font-style:normal;color:var(--coral)}
+.card-logo small{display:block;margin-top:8px;font:500 clamp(6px,.8vw,10px)/1 var(--font);letter-spacing:.34em;color:rgba(255,255,255,.7);text-align:center}
+.card-biz{aspect-ratio:1.65;padding:6% 7%;border-radius:10px;background:#fff;color:#1C2A4A;transform:rotate(6deg);border-left:7px solid var(--coral);box-shadow:0 40px 70px -14px rgba(4,8,20,.8)}
+.card-biz b{display:block;font:800 clamp(12px,1.6vw,20px)/1.1 var(--font);letter-spacing:-.03em}
+.card-biz em{display:block;font:700 clamp(5px,.62vw,8px)/1.3 var(--font);font-style:normal;color:var(--coral);letter-spacing:.1em;margin:3px 0 7%}
+.card-biz span{display:block;font:500 clamp(6px,.78vw,10px)/1.75 var(--font)}
+/* next file */
+.next{position:relative;margin-top:clamp(20px,2.2vw,32px);display:flex;justify-content:space-between;align-items:center;gap:24px 40px;flex-wrap:wrap;
+  padding:clamp(26px,3.6vw,52px);border:1px dashed rgba(255,255,255,.24)}
+.next-l{color:var(--ink-3);display:flex;align-items:center;gap:10px}
+.next h3{margin:12px 0 0;font:800 clamp(24px,2.8vw,42px)/1.08 var(--font);letter-spacing:-.03em;max-width:16em}
+.caret{display:inline-block;width:.09em;height:.86em;margin-left:.1em;background:var(--coral);vertical-align:-.08em;animation:crpBlink 1.1s steps(1) infinite}
 
-/* process */
-.tl{position:relative;max-width:1100px;margin-inline:auto;padding-block:10px}
-.tl-line{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line);transform:translateX(-.5px)}
-.tl-fill{position:absolute;left:0;top:0;width:1px;height:100%;background:linear-gradient(var(--coral),#fff);transform-origin:top;transform:scaleY(var(--tp,0));box-shadow:0 0 14px var(--coral)}
-.tl-pkt{position:absolute;left:-4px;top:calc(var(--tp,0)*100%);width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,107,74,.35),0 0 24px 6px var(--coral);margin-top:-4px}
-.st{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0;padding-block:clamp(26px,4vw,52px)}
-.st .node{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font:500 12px var(--f-mono);color:var(--dim);z-index:2;transition:border-color .5s,color .5s,box-shadow .5s,background .5s}
-.st.on .node{border-color:var(--coral);color:var(--coral);box-shadow:0 0 0 6px rgba(255,107,74,.12),0 0 30px rgba(255,107,74,.45);background:var(--navy)}
-.st .cd{padding:26px 30px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(34,52,90,.5),rgba(27,42,74,.2));transition:border-color .5s,transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s;opacity:.45}
-.st.on .cd{opacity:1;border-color:rgba(255,107,74,.4)}
-.st:nth-child(odd) .cd{grid-column:1;margin-right:56px;text-align:right}
-.st:nth-child(even) .cd{grid-column:2;margin-left:56px}
-.st h4{font-size:clamp(20px,2vw,28px);letter-spacing:-.045em;font-weight:400;margin-bottom:8px}
-.st p{margin:0;color:var(--dim);font-size:15.5px}
+/* ---------- layanan: spec-sheet modules ---------- */
+.sec.glow::before{content:"";position:absolute;left:0;right:0;top:0;height:min(80vh,760px);pointer-events:none;
+  background:radial-gradient(60% 70% at 50% 0%,rgba(38,55,94,.42),transparent 72%)}
+.mods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.mod{position:relative;display:flex;flex-direction:column;min-width:0;padding:clamp(22px,2.2vw,32px);background:var(--bg);transition:background-color .5s var(--ease)}
+.mod:hover,.mod:focus-within{background:#18244A}
+.mod-tr{position:absolute;inset:-1px;z-index:2;pointer-events:none;padding:1px;opacity:0;transition:opacity .4s;
+  background:conic-gradient(from var(--ang),transparent 0deg,transparent 250deg,rgba(255,107,74,.25) 300deg,var(--coral) 352deg,#FFE1D8 358deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.mod:hover .mod-tr,.mod:focus-within .mod-tr,.mod.is-feat.in-view .mod-tr{opacity:1;animation:modTr 3.6s linear infinite}
+@keyframes modTr{to{--ang:360deg}}
+.mod-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:clamp(36px,4vw,60px)}
+.mod-ic{width:44px;height:44px;color:rgba(255,255,255,.9);overflow:visible}
+.mod-ic .c{fill:var(--coral);stroke:none;transform-box:fill-box;transform-origin:center;transition:transform .5s var(--ease)}
+.mod:hover .mod-ic .c{transform:scale(1.35)}
+.mod-ic .d{opacity:.38}
+.mod-k{color:var(--ink-3);font-size:10px}
+.mod-t{margin:0 0 10px;font:800 clamp(20px,1.6vw,23px)/1.15 var(--font);letter-spacing:-.02em}
+.mod-p{margin:0;color:var(--ink-2);font-size:15px;line-height:1.55}
+.mod-inc{list-style:none;margin:24px 0 32px;padding:16px 0 0;border-top:1px solid var(--rule);display:grid;gap:8px;font-size:14px;line-height:1.45;color:rgba(255,255,255,.86)}
+.mod-inc li{display:grid;grid-template-columns:14px minmax(0,1fr);gap:8px}
+.mod-inc li::before{content:"+";font:400 12px/1.5 var(--mono);color:var(--ink-3)}
+.mod-cta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:15px;border-top:1px solid var(--rule);color:var(--ink);transition:color .3s}
+.mod-cta svg{width:15px;height:15px;flex:none;transition:transform .45s var(--ease)}
+.mod-cta:hover,.mod-cta:focus-visible{color:var(--coral)}
+.mod-cta:hover svg,.mod-cta:focus-visible svg{transform:translateX(4px)}
+.mods-note{display:grid;grid-template-columns:8.2em minmax(0,1fr);gap:6px 16px;align-items:baseline;margin-top:-1px;padding:16px clamp(22px,2.2vw,32px);border:1px solid var(--rule)}
+.mods-note dt{color:var(--ink-3);font-size:10.5px}
+.mods-note dd{margin:0;color:var(--ink-2);font-size:14.5px}
 
-/* cta */
-.cta{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:36px;background:var(--navy);padding:clamp(34px,6vw,90px);display:flex;justify-content:space-between;align-items:center;gap:44px;flex-wrap:wrap}
-#warp{position:absolute;inset:0;width:100%;height:100%;display:block}
-.cta:before{content:'';position:absolute;inset:0;background:radial-gradient(70% 90% at 25% 50%,rgba(10,18,32,.85),rgba(10,18,32,.35) 70%,transparent);z-index:1;pointer-events:none}
-.cta>*:not(canvas){position:relative;z-index:2}
-.cta h2{font-size:clamp(30px,4.8vw,76px);line-height:1.02;letter-spacing:-.05em;max-width:9.5em}
-.cta h2 em{font-size:1.18em}
-.cta p{color:var(--silver);font-size:18px;margin:22px 0 34px;max-width:28em}
-.cl{display:flex;gap:12px 28px;flex-wrap:wrap;margin-top:30px;font-size:15px;color:var(--silver)}
-.cl b{font:500 11px var(--f-mono);letter-spacing:.14em;color:var(--coral);margin-right:8px}
-.copy{all:unset;cursor:pointer;font:500 10.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:3px 10px;margin-left:10px;transition:border-color .3s,color .3s}
-.copy:hover{border-color:var(--coral);color:var(--coral)}
-.qr{background:rgba(10,18,32,.6);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:26px;padding:18px;text-align:center;flex:none}
-.qr .qi{position:relative;background:#fff;border-radius:16px;padding:12px;overflow:hidden;margin-bottom:12px}
-.qr img{width:168px;height:168px;display:block;image-rendering:pixelated}
-.qr .qi:after{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:var(--coral);box-shadow:0 0 18px 4px var(--coral);animation:qs 2.6s ease-in-out infinite}
-@keyframes qs{0%,100%{top:0}50%{top:calc(100% - 3px)}}
-.qr span{color:var(--silver)}
+/* ---------- proses: the spark travels the line ---------- */
+.pr-track{position:relative;margin-top:clamp(56px,7vw,104px);--a:22px;--len:0px}
+.pr-line{position:absolute;left:var(--a);right:0;top:22px;height:1px;background:var(--rule-2)}
+.pr-line::after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-top:1px solid var(--rule-2);border-right:1px solid var(--rule-2);transform:rotate(45deg)}
+.pr-fill{position:absolute;left:var(--a);top:22px;width:var(--len);height:1px;background:linear-gradient(90deg,rgba(255,107,74,.2),var(--coral));transform-origin:0 50%;transform:scaleX(0);box-shadow:0 0 10px rgba(255,107,74,.5)}
+.pr-spark{position:absolute;left:var(--a);top:22px;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:var(--coral);z-index:0;
+  box-shadow:0 0 0 4px rgba(255,107,74,.16),0 0 24px 5px var(--coral-glow)}
+.pr-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.6vw,40px)}
+.pr-st{position:relative;padding-top:76px;min-width:0}
+.pr-n{position:absolute;left:0;top:0;width:45px;height:45px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--rule-2);background:var(--bg);
+  font:400 12px/1 var(--mono);letter-spacing:.06em;color:var(--ink-3);z-index:2;transition:border-color .5s,color .5s,box-shadow .5s,background-color .5s}
+.pr-n::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--coral);opacity:0}
+.pr-k{display:block;margin-bottom:12px;color:var(--ink-3);font-size:10.5px}
+.pr-st h3{margin:0 0 10px;font:800 clamp(21px,1.9vw,28px)/1.1 var(--font);letter-spacing:-.025em}
+.pr-st p{margin:0;color:var(--ink-2);font-size:15px;line-height:1.55;max-width:22em}
+.pr-st .txt{transition:opacity .6s var(--ease)}
+.crp-js:not(.crp-rm) .pr-st:not(.on) .txt{opacity:.42}
+.pr-st.on .pr-n{border-color:var(--coral);color:var(--ink);background:#1F2B4D;box-shadow:0 0 0 6px rgba(255,107,74,.09),0 0 28px rgba(255,107,74,.32)}
+.pr-st.live .pr-n::after{animation:prRing 1.6s var(--ease-out) forwards}
+@keyframes prRing{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(2.8)}}
 
-footer{overflow:hidden}
-footer .row{display:flex;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding-block:34px 0;color:var(--dim);font-size:14px;border-top:1px solid var(--line)}
-footer a:hover{color:#fff}
-.mega{font:700 clamp(84px,25vw,420px)/.8 var(--f-body);letter-spacing:-.075em;white-space:nowrap;text-align:center;margin:30px 0 -.07em;color:transparent;-webkit-text-stroke:1px rgba(201,207,219,.3);background:linear-gradient(var(--coral),var(--coral)) no-repeat 0 0/var(--fp,0%) 100%;-webkit-background-clip:text;background-clip:text;user-select:none}
+/* ---------- kontak: closing shot ---------- */
+.ct{overflow:hidden;isolation:isolate}
+.ct::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(100% 70% at 50% 100%,#22325A 0%,rgba(28,42,74,.55) 40%,transparent 78%)}
+.ct-floor{position:absolute;left:0;right:0;bottom:0;height:min(46vh,460px);z-index:-1;pointer-events:none;overflow:hidden;perspective:340px;perspective-origin:50% 0;
+  -webkit-mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,.6) 45%,transparent 100%);mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,.6) 45%,transparent 100%)}
+.ct-floor i{position:absolute;left:-60%;right:-60%;top:0;height:260%;transform-origin:50% 0;transform:rotateX(68deg);
+  background-image:linear-gradient(rgba(140,160,215,.30) 1px,transparent 1px),linear-gradient(90deg,rgba(140,160,215,.30) 1px,transparent 1px);background-size:72px 72px;background-position:50% 0}
+.crp-js:not(.crp-rm) .ct-floor i{animation:ctFloor 4s linear infinite}
+@keyframes ctFloor{to{transform:rotateX(68deg) translateY(72px)}}
+.crp-js:not(.crp-rm) .ct-floor{opacity:0;transform:translateY(60px);transition:opacity 1.8s var(--ease-out),transform 1.8s var(--ease-out)}
+.crp-js:not(.crp-rm) .ct.is-live .ct-floor{opacity:1;transform:none}
+.ct>.fr{padding-bottom:clamp(120px,14vw,200px)}
+.ct-g{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:56px clamp(48px,6vw,104px);align-items:end;margin-top:clamp(56px,8vw,112px)}
+.sh-xl{font-size:clamp(42px,7.4vw,118px);line-height:.98;letter-spacing:-.045em;max-width:10.5em}
+.pd-r{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--coral);opacity:0}
+.crp-js:not(.crp-rm) .ct.is-live .pd-r{animation:pdRing 3.2s var(--ease-out) infinite}
+.crp-js:not(.crp-rm) .ct.is-live .pd-r+.pd-r{animation-delay:1.6s}
+@keyframes pdRing{0%{opacity:.85;transform:scale(1)}70%,100%{opacity:0;transform:scale(7)}}
+.ct .lead{margin-top:28px;max-width:34em}
+.ct-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.chs{list-style:none;margin:52px 0 0;padding:0;border-top:1px solid var(--rule-2);max-width:620px}
+.chs li{display:grid;grid-template-columns:8.6em minmax(0,1fr) auto;align-items:center;gap:16px;min-height:56px;padding:8px 0;border-bottom:1px solid var(--rule)}
+.ch-k{color:var(--ink-3);font-size:10.5px}
+.ch-v{font:400 14.5px/1.4 var(--mono);letter-spacing:.02em;color:var(--ink);overflow-wrap:anywhere;min-width:0}
+a.ch-v:hover{color:var(--coral)}
+.ch-b{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 13px;border:1px solid var(--rule-2);border-radius:999px;
+  font:400 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);transition:border-color .3s,color .3s,background-color .3s;white-space:nowrap}
+.ch-b:hover,.ch-b:focus-visible{border-color:var(--coral);color:var(--coral)}
+.ch-b.ok{border-color:var(--coral);background:rgba(255,107,74,.1);color:var(--coral)}
+.qr{position:relative;width:240px;padding:18px 18px 16px;background:rgba(20,31,56,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--rule)}
+.qr .bk{--l:16px;--c:rgba(255,255,255,.75);inset:-5px}
+.qr-top{display:flex;justify-content:space-between;align-items:center;color:var(--ink-3);font-size:10px;margin-bottom:14px}
+.qr-i{position:relative;background:#fff;padding:12px;overflow:hidden}
+.qr-i img{display:block;width:180px;height:180px;image-rendering:pixelated}
+.qr-scan{position:absolute;left:0;right:0;top:0;height:2px;background:var(--coral);box-shadow:0 0 14px 3px var(--coral-glow);opacity:0}
+.crp-js:not(.crp-rm) .qr-scan{opacity:1;animation:qrScan 2.8s var(--ease) infinite alternate}
+@keyframes qrScan{to{transform:translateY(202px)}}
+.qr-cap{display:flex;justify-content:space-between;gap:8px;margin-top:14px;color:var(--ink-2);font-size:10.5px}
+.qr-cap b{font-weight:400;color:var(--ink-3)}
 
-/* fab */
-.fab{position:fixed;right:clamp(18px,3vw,34px);bottom:calc(clamp(18px,3vw,34px) + env(safe-area-inset-bottom,0px));z-index:97;display:flex;gap:12px;align-items:center;transition:opacity .4s,transform .4s cubic-bezier(.2,.8,.2,1)}
-.fab.off{opacity:0;transform:translateY(20px) scale(.9);pointer-events:none}
-.fab a{width:60px;height:60px;border-radius:50%;background:var(--coral);color:var(--bg);display:grid;place-items:center;position:relative;box-shadow:0 12px 40px -6px rgba(255,107,74,.7);transition:transform .3s}
-.fab a:hover{transform:scale(1.1)}
-.fab a:before{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid var(--coral);animation:fr 2.4s ease-out infinite}
-@keyframes fr{from{transform:scale(1);opacity:.9}to{transform:scale(1.7);opacity:0}}
-.fab .tip{background:rgba(10,18,32,.85);border:1px solid var(--line);backdrop-filter:blur(10px);font-weight:600;font-size:13px;padding:9px 14px;border-radius:12px;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;white-space:nowrap}
+/* ---------- footer ---------- */
+.ft{position:relative}
+.ft-g{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.7fr) minmax(0,.8fr) minmax(0,1fr);gap:40px clamp(24px,3vw,48px);padding-block:clamp(64px,7vw,96px) clamp(40px,5vw,72px)}
+.ft-tag{margin:18px 0 0;font:800 clamp(20px,1.75vw,26px)/1.25 var(--font);letter-spacing:-.02em;max-width:19em;text-wrap:balance}
+.ft-col{display:flex;flex-direction:column;align-items:flex-start;gap:9px;font-size:15px;min-width:0}
+.ft-col .mono{color:var(--ink-3);margin-bottom:8px;font-size:10.5px}
+.ft-col a,.ft-col span{color:var(--ink-2);transition:color .3s}
+.ft-col a:hover{color:var(--ink)}
+.ft-hud{display:flex;flex-direction:column;align-items:flex-start;gap:12px;color:var(--ink-2)}
+.ft-hud b{font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums}
+.ft-top{display:inline-flex;align-items:center;gap:10px;margin-top:6px;padding:10px 14px;border:1px solid var(--rule-2);border-radius:999px;color:var(--ink);transition:border-color .3s,color .3s}
+.ft-top svg{width:12px;height:12px;transition:transform .45s var(--ease)}
+.ft-top:hover{border-color:var(--coral);color:var(--coral)}
+.ft-top:hover svg{transform:translateY(-3px)}
+.ft-mark{padding-inline:var(--px)}
+.ft-mark svg{display:block;width:100%;height:auto;overflow:visible}
+.ft-mark use{fill:none;stroke:rgba(255,255,255,.34);stroke-width:var(--sw,4);stroke-linejoin:round}
+.ft-mark circle{fill:var(--coral);transform-box:fill-box;transform-origin:center}
+.ft-bot{display:flex;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;margin-top:clamp(28px,3vw,44px);padding-block:22px calc(26px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--rule);color:var(--ink-3)}
+
+/* ---------- fab ---------- */
+.fab{position:fixed;right:calc(clamp(16px,2.6vw,32px) + env(safe-area-inset-right,0px));bottom:calc(clamp(16px,2.6vw,32px) + env(safe-area-inset-bottom,0px));z-index:97;display:flex;gap:12px;align-items:center;transition:opacity .4s,transform .5s var(--ease-out)}
+.fab.off{opacity:0;transform:translateY(16px) scale(.92);pointer-events:none}
+.fab a{position:relative;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--coral);color:#fff;box-shadow:0 12px 34px -8px rgba(255,107,74,.75);transition:transform .4s var(--ease-out)}
+.fab a:hover{transform:scale(1.07)}
+.fab a::before{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--coral);animation:fabRing 2.6s var(--ease-out) infinite}
+@keyframes fabRing{from{transform:scale(1);opacity:.85}to{transform:scale(1.75);opacity:0}}
+.fab .tip{padding:10px 13px;background:rgba(20,31,56,.92);border:1px solid var(--rule-2);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  font:400 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .4s var(--ease-out)}
 .fab:hover .tip{opacity:1;transform:none}
 
-/* responsive */
-@media (max-width:1100px){.svc{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:900px){
-  .prog{display:none}
-  .stk{grid-template-columns:minmax(0,1fr);position:static;min-height:0}
-  .phn{right:0;bottom:0;width:24%}
-  .info .big{font-size:64px}
-  .tl-line{left:23px}.st{grid-template-columns:minmax(0,1fr)}
-  .st .node{left:23px}
-  .st:nth-child(n) .cd{grid-column:1;margin:0 0 0 64px;text-align:left}
+/* ---------- responsive ---------- */
+@media (min-width:1024px) and (min-height:700px){
+  .case{position:sticky;top:calc(var(--nav-h) + 18px + var(--i) * 14px)}
+  .case-in{min-height:min(calc(100vh - var(--nav-h) - 96px),660px)}
 }
-@media (max-width:560px){
-  .svc{grid-template-columns:minmax(0,1fr)}
-  .qr{margin-inline:auto}
+@media (min-width:1181px){.mod-p{min-height:calc(1.55em * 3)}}
+@media (max-width:1180px){
+  .mods{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ft-g{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ft-g>div:first-child{grid-column:1/-1}
 }
+@media (max-width:1023px){
+  .case-in{grid-template-columns:minmax(0,1fr)}
+  .case-media{padding:0 3% 8% 0}
+  .ct-g{grid-template-columns:minmax(0,1fr)}
+  .qr{justify-self:start}
+}
+@media (max-width:899px){
+  .shd-g{grid-template-columns:minmax(0,1fr)}
+  .kp-g{grid-template-columns:minmax(0,1fr)}
+  .kp-c+.kp-c::before{left:clamp(20px,2.6vw,40px);right:clamp(20px,2.6vw,40px);top:0;bottom:auto;width:auto;height:1px}
+  .kp-c{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 20px;align-items:end}
+  .kp-c .kp-l,.kp-c .kp-s{grid-column:1/-1}
+  .kp-c .kp-l{order:-1}
+  .kp-ins{grid-column:1/-1;min-height:0;padding-top:4px}
+  /* process goes vertical */
+  .pr-steps{grid-template-columns:minmax(0,1fr);gap:44px}
+  .pr-st{padding:4px 0 0 76px}
+  .pr-k{margin-bottom:8px}
+  .pr-line{left:22px;right:auto;top:var(--a);width:1px;height:var(--len)}
+  .pr-line::after{display:none}
+  .pr-fill{left:22px;top:var(--a);width:1px;height:var(--len);background:linear-gradient(180deg,rgba(255,107,74,.2),var(--coral));transform-origin:50% 0;transform:scaleY(0)}
+  .pr-spark{left:22px;top:var(--a)}
+}
+@media (max-width:767px){
+  :root{--fx:0px;--px:20px}
+  .fr::before,.fr::after{display:none}
+  .xm{display:none}
+  .meta{font-size:10px}
+  .meta>span:nth-child(2){display:none}
+  .sh{font-size:clamp(34px,9.6vw,46px)}
+  .sh-xl{font-size:clamp(40px,11.4vw,56px)}
+  .case-in{padding:14px 14px 22px;gap:26px}
+  .case-media{padding:0 2% 12% 0}
+  .ph{width:27%;border-radius:14px;padding:3px}
+  .ph-v{border-radius:11px}
+  .dims{display:none}
+  .bw-bar{height:24px}
+  .case-info{padding-inline:6px}
+  .spec-t>div{grid-template-columns:7em minmax(0,1fr);gap:12px}
+  .mods{grid-template-columns:minmax(0,1fr)}
+  .mod-hd{margin-bottom:28px}
+  .mods-note{grid-template-columns:minmax(0,1fr)}
+  .chs li{grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 0}
+  .ch-k{grid-column:1/-1}
+  .qr{width:100%;max-width:300px;justify-self:center}
+  .qr-i{display:flex;justify-content:center}
+  .ct-ctas .hbtn{width:100%}
+  .ft-g{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);column-gap:20px}
+  .ft-hud{grid-column:1/-1}
+  .fab a{width:54px;height:54px}
+  .fab .tip{display:none}
+}
+@media (max-width:900px){.prog{display:none}}
 @media (prefers-reduced-motion:reduce){
-  *,*:before,*:after{animation:none!important;transition:none!important}
+  .sq.bl,.caret,.fl,.fab a::before,.mod:hover .mod-tr,.mod.is-feat.in-view .mod-tr{animation:none!important}
+  .mod.is-feat .mod-tr{opacity:1}
+  .mod-tr{--ang:300deg}
+  .grain,.fab,.mod,.mod-cta,.mod-cta svg,.kp-cta svg,.ft-top svg{transition:none}
   html{scroll-behavior:auto}
-  .js .rv.pending{transform:none;opacity:1}
 }
 
-/* language switch: the ID/EN toggle lives in the Spark nav (styles below); text swaps fade */
-[data-i18n]{transition:opacity .22s ease}
+/* language switch: text swaps fade */
+body.swap-fx [data-i18n],body.swap-fx #crpH1{transition:opacity .22s ease}
 .swapping [data-i18n],.swapping #crpH1{opacity:0}
-#crpH1{transition:opacity .22s ease}
+
 </style>
 <style>
 /* ===================================================================
@@ -248,7 +432,7 @@ html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth [data-lenis-prevent]{
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .crp-page{position:relative;overflow-x:clip}
-/* Spark typography is scoped to its own blocks: the sections below keep the site's fonts */
+/* Spark typography is scoped to its own blocks; the sections below set the same Inter / JetBrains Mono system */
 .nav,.nav-sheet,.hero,.crp-pl{color:var(--white);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 /* :where() keeps these resets at element/pseudo specificity, exactly like the unscoped originals */
 :where(.nav,.nav-sheet) button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
@@ -335,9 +519,9 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
   40%{transform:translate(72px,9px)}50%{transform:translate(-66px,-31px)}60%{transform:translate(18px,77px)}70%{transform:translate(-83px,40px)}
   80%{transform:translate(45px,-71px)}90%{transform:translate(-25px,-8px)}100%{transform:translate(0,0)}}
 
-/* Seam: the hero's navy fades into the site background (#0A1220) above the marquee band (under the HUD, over grid + grain) */
+/* Seam: the hero's navy fades into the site background (navy-900) above the marquee band (under the HUD, over grid + grain) */
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;z-index:3;height:clamp(110px,20vh,220px);pointer-events:none;
-  background:linear-gradient(180deg,rgba(10,18,32,0) 0%,rgba(10,18,32,.55) 55%,var(--bg,#0A1220) 100%)}
+  background:linear-gradient(180deg,rgba(20,31,56,0) 0%,rgba(20,31,56,.55) 55%,var(--bg,#141F38) 100%)}
 
 /* L5 content stack */
 .hero-inner{position:relative;z-index:5;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -622,117 +806,304 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
 
 
 <div class="mqs" aria-hidden="true">
-  <div class="mq"><div class="tr" id="mq1"></div></div>
-  <div class="mq"><div class="tr" id="mq2"></div></div>
+  <div class="mq mq-big"><div class="tr" id="mq1"></div></div>
+  <div class="mq mq-tape"><div class="tr" id="mq2"></div></div>
 </div>
 
-<section class="sec" id="karya">
-  <div class="wrap">
-    <div class="head rv"><div><div class="eyebrow mono" data-i18n="w.eyebrow">Karya pilihan</div><h2 class="h" data-i18n="w.title">Proyek nyata yang <em>sudah berjalan</em></h2></div><p data-i18n="w.lead">Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai.</p></div>
-    <div class="stack">
-      <article class="stk" style="--i:0">
-        <div class="shotwrap">
-          <div class="bf"><div class="bar"><i></i><i></i><i></i></div><img src="karya/gmim-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p1d"></div>
-          <div class="phn"><img src="karya/gmim-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
+<section class="sec kp" id="sekilas" aria-labelledby="kpLab">
+  <div class="fr">
+    <div class="rule"><b></b><i class="xm xm-l"></i><i class="xm xm-r"></i></div>
+    <div class="in">
+      <div class="shd"><div class="meta mono"><span class="lab"><i class="sq"></i><span id="kpLab" data-i18n="k.label" data-scr>Sekilas</span></span><span data-i18n="k.meta" data-scr>Cara kami bekerja</span><span>1.4748° N&nbsp;&nbsp;124.8421° E</span></div></div>
+      <div class="kp-g">
+        <i class="bk" aria-hidden="true"></i>
+        <div class="kp-c">
+          <span class="kp-l mono" data-i18n="k.1l">Waktu pengerjaan</span>
+          <p class="kp-v" data-i18n="pr.1a">1–2<small>minggu</small></p>
+          <p class="kp-s" data-i18n="pr.1b">Website selesai</p>
+          <div class="kp-ins" aria-hidden="true">
+            <div class="ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+            <div class="ins-cap mono"><span data-i18n="k.d1">Hari 1</span><span data-i18n="k.d14">Hari 7–14</span></div>
+          </div>
         </div>
-        <div class="info"><div class="big">01</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
-          <h3>E-Pelayanan Jemaat<br>GMIM Imanuel Talawaan</h3>
-          <p data-i18n="w.p1">Portal pelayanan jemaat: keuangan, pemetaan data jemaat lewat sensus, warta, dan jadwal ibadah dalam satu tempat.</p>
-          <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">Tailwind</span></div></div>
-      </article>
-      <article class="stk" style="--i:1">
-        <div class="shotwrap">
-          <div class="bf"><div class="bar"><i></i><i></i><i></i></div><img src="karya/absen-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p2d"></div>
-          <div class="phn"><img src="karya/absen-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
+        <div class="kp-c">
+          <span class="kp-l mono" data-i18n="k.2l">Revisi</span>
+          <p class="kp-v" data-i18n="pr.2a">2×<small>revisi</small></p>
+          <p class="kp-s" data-i18n="pr.2b">Sudah termasuk</p>
+          <div class="kp-ins" aria-hidden="true">
+            <div class="revs"><b>R1</b><b>R2</b></div>
+            <div class="ins-cap mono"><span data-i18n="k.rcap">Sudah termasuk paket</span></div>
+          </div>
         </div>
-        <div class="info"><div class="big">02</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
-          <h3>Absensi BASARNAS<br>Sulawesi Utara</h3>
-          <p data-i18n="w.p2">Presensi pegawai Kantor SAR Manado dengan geolokasi, selfie, pengenalan wajah, dan laporan real-time.</p>
-          <div class="tags"><span class="tag" data-i18n="w.t.geo">Geolokasi</span><span class="tag" data-i18n="w.t.face">Pengenalan wajah</span><span class="tag">React</span><span class="tag">Firebase</span></div></div>
-      </article>
-      <article class="stk" style="--i:2">
-        <div class="shotwrap">
-          <div class="bf"><div class="bar"><i></i><i></i><i></i></div><img src="karya/tunan-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p3d"></div>
-          <div class="phn"><img src="karya/tunan-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div>
-        </div>
-        <div class="info"><div class="big">03</div><div class="mono badge" data-i18n="w.real">Proyek nyata</div>
-          <h3>Tunan Kreatif</h3>
-          <p data-i18n="w.p3">Situs studio kreatif Minahasa Utara untuk videografi, konten digital, branding, dan promosi daerah, lengkap dengan portofolio dan permintaan penawaran.</p>
-          <div class="tags"><span class="tag" data-i18n="w.t.video">Videografi</span><span class="tag" data-i18n="w.t.digital">Konten digital</span><span class="tag" data-i18n="w.t.static">Situs statis</span></div></div>
-      </article>
-      <article class="stk" style="--i:3">
-        <div class="shotwrap">
-          <div class="bf brandf"><div class="bd">
-            <div class="float" style="left:5%;top:11%;width:52%"><div style="aspect-ratio:1.65;border-radius:14px;background:#1B2A4A;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;transform:rotate(-7deg);box-shadow:0 40px 70px -10px rgba(0,0,0,.65)"><div style="font:800 clamp(30px,5vw,64px)/1 var(--f-body);letter-spacing:-.07em"><span style="color:#FF6B4A">&lt;</span>crp<span style="color:#FF6B4A">/&gt;</span><div style="font:500 clamp(6px,.9vw,10px) var(--f-body);letter-spacing:.34em;color:#C9CFDB;text-align:center;margin-top:8px" data-i18n="m.tag">DESAIN &amp; WEBSITE</div></div></div></div>
-            <div class="float b" style="right:3%;bottom:7%;width:42%"><div style="aspect-ratio:1.65;border-radius:12px;background:#fff;color:#1B2A4A;transform:rotate(6deg);border-left:8px solid #FF6B4A;padding:5%;box-shadow:0 40px 70px -10px rgba(0,0,0,.65)"><b style="font:500 clamp(12px,1.6vw,19px) var(--f-display);letter-spacing:-.05em">Christian</b><div style="font:700 clamp(5px,.7vw,8px) var(--f-body);color:#FF6B4A;letter-spacing:.1em;margin:3px 0 8px" data-i18n="m.role">DESAINER &amp; PEMBUAT WEBSITE</div><div style="font-size:clamp(6px,.85vw,10px);line-height:1.8;font-weight:500">WA 0895-3369-24576<br>IG @crp.works<br>crp.workss@gmail.com</div></div></div>
-          </div></div>
-        </div>
-        <div class="info"><div class="big">04</div><div class="mono badge brand" data-i18n="w.brandb">Branding</div>
-          <h3 data-i18n="w.brand">Identitas Brand CRP</h3>
-          <p data-i18n="w.brandp">Logo, kartu nama dengan QR WhatsApp, dan aset media sosial dalam satu sistem warna.</p>
-          <div class="tags"><span class="tag">Logo</span><span class="tag" data-i18n="w.t.card">Kartu Nama</span><span class="tag" data-i18n="w.t.soc">Media Sosial</span></div></div>
-      </article>
-    </div>
-    <div class="cta-card rv"><h3 data-i18n="w.next">Proyek <em>Anda</em> bisa jadi yang berikutnya</h3><a class="btn coral mag" data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="nav.cta">Chat WhatsApp</span><span class="arr">→</span></a></div>
-  </div>
-</section>
-
-<section class="sec" id="layanan">
-  <div class="wrap">
-    <div class="head rv"><div><div class="eyebrow mono" data-i18n="s.eyebrow">Layanan</div><h2 class="h" data-i18n="s.title">Apa yang bisa <em>kami bantu</em></h2></div><p data-i18n="s.lead">Paket jelas dan harga terbuka. Klien pertama mendapat harga perkenalan.</p></div>
-    <div class="svc">
-      <div class="sv rv"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13" cy="13" r="10" stroke-dasharray="3 3.4" class="sp"/><circle cx="13" cy="13" r="4.2" class="pl"/></svg></div><h4 data-i18n="s.1t">Logo &amp; Branding</h4><p data-i18n="s.1p">Identitas visual yang mudah diingat, siap untuk cetak dan media sosial.</p><div class="price"><small data-i18n="s.from">Mulai dari</small>Rp 300 rb</div></div>
-      <div class="sv hi rv"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7 2 13l6 6" class="pl"/><path d="m18 7 6 6-6 6" class="pl"/><path d="m15 5-4 16"/></svg></div><h4 data-i18n="s.2t">Website Usaha</h4><p data-i18n="s.2p">Katalog, profil usaha, atau website gereja dengan tombol pesan via WhatsApp.</p><div class="price"><small data-i18n="s.from">Mulai dari</small>Rp 1,5 jt</div></div>
-      <div class="sv rv"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="currentColor"><rect class="bl" x="2" y="2" width="9" height="9" rx="1.5"/><rect class="bl" x="15" y="2" width="9" height="9" rx="1.5"/><rect class="bl" x="2" y="15" width="9" height="9" rx="1.5"/><rect x="15" y="15" width="4" height="4"/><rect x="20" y="20" width="4" height="4"/></svg></div><h4 data-i18n="s.3t">Menu Digital QR</h4><p data-i18n="s.3p">Pelanggan scan QR di meja dan langsung melihat menu Anda.</p><div class="price"><small data-i18n="s.from">Mulai dari</small>Rp 500 rb</div></div>
-      <div class="sv rv"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="21" height="21" rx="6.5"/><circle cx="13" cy="13" r="5" class="pl"/><circle cx="19.2" cy="6.8" r="1.1" fill="currentColor"/></svg></div><h4 data-i18n="s.4t">Konten Instagram</h4><p data-i18n="s.4p">Desain feed dan story yang rapi dan konsisten dengan brand Anda.</p><div class="price"><small data-i18n="s.10">Paket 10 desain</small>Rp 300 rb</div></div>
-    </div>
-    <p class="note rv" data-i18n="s.note">Domain website dibayar terpisah, sekitar Rp 150–200 rb per tahun. Perawatan bulanan mulai Rp 200 rb.</p>
-  </div>
-</section>
-
-<section class="sec" id="proses" style="padding-top:0">
-  <div class="wrap">
-    <div class="head rv"><div><div class="eyebrow mono" data-i18n="p.eyebrow">Proses</div><h2 class="h" data-i18n="p.title">Mudah, cepat, <em>tanpa ribet</em></h2></div><p data-i18n="p.lead">Dari chat pertama sampai website online, semua kabar dikirim lewat WhatsApp.</p></div>
-    <div class="tl" id="tl">
-      <div class="tl-line"><div class="tl-fill"></div><span class="tl-pkt"></span></div>
-      <div class="st"><span class="node">01</span><div class="cd"><h4 data-i18n="p.1t">Ngobrol dulu</h4><p data-i18n="p.1p">Ceritakan usaha dan kebutuhan Anda. Konsultasi gratis.</p></div></div>
-      <div class="st"><span class="node">02</span><div class="cd"><h4 data-i18n="p.2t">Konsep &amp; DP 50%</h4><p data-i18n="p.2p">Kami kirim konsep awal. Pengerjaan dimulai setelah DP.</p></div></div>
-      <div class="st"><span class="node">03</span><div class="cd"><h4 data-i18n="p.3t">Revisi</h4><p data-i18n="p.3p">Dua kali revisi sampai hasilnya pas dengan selera Anda.</p></div></div>
-      <div class="st"><span class="node">04</span><div class="cd"><h4 data-i18n="p.4t">Online</h4><p data-i18n="p.4p">Website tayang dan semua file desain diserahkan lengkap.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="testimoni" style="padding-top:0" hidden>
-  <div class="wrap">
-    <div class="head rv"><div><div class="eyebrow mono" data-i18n="t.eyebrow">Kata klien</div><h2 class="h" data-i18n="t.title">Mereka sudah <em>mencoba</em></h2></div></div>
-    <div class="testi" id="testi-list"></div>
-  </div>
-</section>
-
-<section class="sec" id="kontak" style="padding-top:0">
-  <div class="wrap">
-    <div class="cta rv" id="cta">
-      <canvas id="warp" aria-hidden="true"></canvas>
-      <div style="min-width:0">
-        <h2 data-i18n="c.title">Punya usaha? Ayo bikin <em>tampil beda.</em></h2>
-        <p data-i18n="c.lead">Konsultasi gratis. Balasan cepat setelah jam kerja dan di akhir pekan.</p>
-        <a class="btn coral mag" data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="nav.cta">Chat WhatsApp</span><span class="arr">→</span></a>
-        <div class="cl">
-          <span><b>WA</b><span id="wa-num">0895-3369-24576</span><button class="copy" type="button" id="copy-wa" data-i18n="c.copy">Salin</button></span>
-          <span><b>IG</b><a href="https://instagram.com/crp.works" target="_blank" rel="noopener">@crp.works</a></span>
-          <span><b>EMAIL</b>crp.workss@gmail.com</span>
+        <div class="kp-c">
+          <span class="kp-l mono" data-i18n="k.3l">Konsultasi</span>
+          <p class="kp-v" data-i18n="pr.3a">Gratis</p>
+          <p class="kp-s" data-i18n="pr.3b">Konsultasi awal</p>
+          <div class="kp-ins">
+            <a class="kp-cta" data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="k.cta">Mulai lewat WhatsApp</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.2M9 3.8 13.2 8 9 12.2"/></svg></a>
+          </div>
         </div>
       </div>
-      <div class="qr"><div class="qi"><img id="qrimg" alt="QR code WhatsApp CRP" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUgAAAFIAQMAAAAI2vVwAAAABlBMVEUbKkr///+zEOJ5AAABxElEQVR42u2by2oFMQxDRf//n11KYkspFKJsWqhmYJ5ZnetYsjMXdbshIzPyN0ZibXO3ntS65NsP3G7/eSQaPmYnaP404enw/DpBzoMTfBqePs/qSd7Tvio8n3muE1b2xH4Wns/5s6NyY9Tn4enw3Bc/7NF3k+dYp7FJo0L6Ojxdv9QBOfcM4PB04lNIYtS+wxMbcXg6PIuijnGeHa3Jn54e0bhT01mBbq0PT0OPJBB3SsXYp/D053uTowDN2y6dwvOeZ+sQJHM23Y7Z8LzlSZs55gjjoEahwvM+f+Ko4efQMRuedny2j4dI+hG34XnPsw7zdJb10yIJT8N/1tkA3QwP9xSeRv1OZYcudUBAh+c1zy067IKqt6/U7w/9unZJIvPMppnvZnyWBCQPJVVSeBp6RAkCk6iueqQ+8vQdOJJo9+dLs2p4Gnqk+ZP2aRAnPs38qV3Pb2tHnUHD0/Gf1CStMtUEhKfjl/jlF/uf51J8eBr6Dsq5LCPNF2LJn+Z81/UNaIeZHzGGp1NvkucQpp1HeL7wVAsP6dylX/can4O0tM+U+f6WPznpZQVp8ml4mvqu39RJswnpJ7/5z/xrIyP/3MhPwNtYIQE9HsgAAAAASUVORK5CYII="></div><span class="mono" data-i18n="c.scan">Scan untuk chat</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="karya" aria-labelledby="hKarya">
+  <div class="fr">
+    <div class="rule"><b></b><i class="xm xm-l"></i><i class="xm xm-r"></i></div>
+    <div class="in">
+      <header class="shd">
+        <div class="meta mono"><span class="lab"><i class="sq"></i><span data-i18n="w.eyebrow" data-scr>Portofolio</span></span><span data-i18n="w.meta" data-scr>Studi kasus</span><span data-i18n="w.count" data-scr>04 proyek</span></div>
+        <div class="shd-g"><h2 class="sh" id="hKarya"><span data-i18n="w.title">Proyek nyata yang sudah berjalan</span><i class="pd" aria-hidden="true"></i></h2><p class="lead" data-i18n="w.lead">Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai.</p></div>
+      </header>
+
+      <div class="cases sec-body">
+        <article class="case" style="--i:0">
+          <div class="case-in">
+            <div class="case-media">
+              <figure class="bw"><div class="bw-bar" aria-hidden="true"><i></i><i></i><i></i><span class="dim mono">1280 × 800</span></div><div class="bw-v"><img src="karya/gmim-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p1d"><i class="scan" aria-hidden="true"></i><i class="scan-l" aria-hidden="true"></i></div></figure>
+              <figure class="ph"><div class="ph-v"><img src="karya/gmim-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div></figure>
+              <div class="dims mono" aria-hidden="true"><span>DESKTOP <b>1280×800</b></span><span>MOBILE <b>360×779</b></span></div>
+            </div>
+            <div class="case-info">
+              <div class="case-top mono"><span class="stt"><i class="sq bl"></i><span data-i18n="w.real">Proyek nyata</span></span><span>Web app</span></div>
+              <h3 class="case-t">E-Pelayanan Jemaat<br>GMIM Imanuel Talawaan</h3>
+              <p class="case-p" data-i18n="w.p1">Portal pelayanan jemaat: keuangan, pemetaan data jemaat lewat sensus, warta, dan jadwal ibadah dalam satu tempat.</p>
+              <dl class="spec-t">
+                <div><dt class="mono" data-i18n="w.k.client">Klien</dt><dd>GMIM Imanuel Talawaan</dd></div>
+                <div><dt class="mono" data-i18n="w.k.type">Jenis</dt><dd data-i18n="w.1.type">Portal pelayanan jemaat</dd></div>
+                <div><dt class="mono" data-i18n="w.k.stack">Teknologi</dt><dd><span>React</span><span>Firebase</span><span>Tailwind</span></dd></div>
+              </dl>
+            </div>
+            <i class="bk" aria-hidden="true"></i><i class="case-dim" aria-hidden="true"></i>
+          </div>
+        </article>
+
+        <article class="case" style="--i:1">
+          <div class="case-in">
+            <div class="case-media">
+              <figure class="bw"><div class="bw-bar" aria-hidden="true"><i></i><i></i><i></i><span class="dim mono">1280 × 800</span></div><div class="bw-v"><img src="karya/absen-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p2d"><i class="scan" aria-hidden="true"></i><i class="scan-l" aria-hidden="true"></i></div></figure>
+              <figure class="ph"><div class="ph-v"><img src="karya/absen-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div></figure>
+              <div class="dims mono" aria-hidden="true"><span>DESKTOP <b>1280×800</b></span><span>MOBILE <b>360×779</b></span></div>
+            </div>
+            <div class="case-info">
+              <div class="case-top mono"><span class="stt"><i class="sq bl"></i><span data-i18n="w.real">Proyek nyata</span></span><span>Web app</span></div>
+              <h3 class="case-t">Absensi BASARNAS<br>Sulawesi Utara</h3>
+              <p class="case-p" data-i18n="w.p2">Presensi pegawai Kantor SAR Manado dengan geolokasi, selfie, pengenalan wajah, dan laporan real-time.</p>
+              <dl class="spec-t">
+                <div><dt class="mono" data-i18n="w.k.client">Klien</dt><dd data-i18n="w.2.client">Kantor SAR Manado</dd></div>
+                <div><dt class="mono" data-i18n="w.k.type">Jenis</dt><dd data-i18n="w.2.type">Sistem presensi pegawai</dd></div>
+                <div><dt class="mono" data-i18n="w.k.feat">Fitur</dt><dd><span data-i18n="w.t.geo">Geolokasi</span><span data-i18n="w.t.face">Pengenalan wajah</span></dd></div>
+                <div><dt class="mono" data-i18n="w.k.stack">Teknologi</dt><dd><span>React</span><span>Firebase</span></dd></div>
+              </dl>
+            </div>
+            <i class="bk" aria-hidden="true"></i><i class="case-dim" aria-hidden="true"></i>
+          </div>
+        </article>
+
+        <article class="case" style="--i:2">
+          <div class="case-in">
+            <div class="case-media">
+              <figure class="bw"><div class="bw-bar" aria-hidden="true"><i></i><i></i><i></i><span class="dim mono">1280 × 800</span></div><div class="bw-v"><img src="karya/tunan-d.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="" data-i18n-alt="a.p3d"><i class="scan" aria-hidden="true"></i><i class="scan-l" aria-hidden="true"></i></div></figure>
+              <figure class="ph"><div class="ph-v"><img src="karya/tunan-m.jpg" width="360" height="779" loading="lazy" decoding="async" alt="" data-i18n-alt="a.phone"></div></figure>
+              <div class="dims mono" aria-hidden="true"><span>DESKTOP <b>1280×800</b></span><span>MOBILE <b>360×779</b></span></div>
+            </div>
+            <div class="case-info">
+              <div class="case-top mono"><span class="stt"><i class="sq bl"></i><span data-i18n="w.real">Proyek nyata</span></span><span>Website</span></div>
+              <h3 class="case-t">Tunan Kreatif</h3>
+              <p class="case-p" data-i18n="w.p3">Situs studio kreatif Minahasa Utara untuk videografi, konten digital, branding, dan promosi daerah, lengkap dengan portofolio dan permintaan penawaran.</p>
+              <dl class="spec-t">
+                <div><dt class="mono" data-i18n="w.k.client">Klien</dt><dd data-i18n="w.3.client">Tunan Kreatif, Minahasa Utara</dd></div>
+                <div><dt class="mono" data-i18n="w.k.type">Jenis</dt><dd data-i18n="w.t.static">Situs statis</dd></div>
+                <div><dt class="mono" data-i18n="w.k.focus">Fokus</dt><dd><span data-i18n="w.t.video">Videografi</span><span data-i18n="w.t.digital">Konten digital</span></dd></div>
+              </dl>
+            </div>
+            <i class="bk" aria-hidden="true"></i><i class="case-dim" aria-hidden="true"></i>
+          </div>
+        </article>
+
+        <article class="case" style="--i:3">
+          <div class="case-in">
+            <div class="case-media">
+              <div class="art">
+                <span class="art-l mono" aria-hidden="true" data-i18n="w.art">Sistem identitas</span>
+                <div class="fl" style="left:6%;top:14%;width:52%"><div class="card-logo"><div><b><i>&lt;</i>crp<i>/&gt;</i></b><small data-i18n="m.tag">DESAIN &amp; WEBSITE</small></div></div></div>
+                <div class="fl b" style="right:5%;bottom:9%;width:42%"><div class="card-biz"><b>Christian</b><em data-i18n="m.role">DESAINER &amp; PEMBUAT WEBSITE</em><span>WA 0895-3369-24576<br>IG @crp.works<br>crp.workss@gmail.com</span></div></div>
+              </div>
+            </div>
+            <div class="case-info">
+              <div class="case-top mono"><span class="stt"><i class="sq"></i><span data-i18n="w.brandb">Branding</span></span><span data-i18n="w.4.k">Cetak + digital</span></div>
+              <h3 class="case-t" data-i18n="w.brand">Identitas Brand CRP</h3>
+              <p class="case-p" data-i18n="w.brandp">Logo, kartu nama dengan QR WhatsApp, dan aset media sosial dalam satu sistem warna.</p>
+              <dl class="spec-t">
+                <div><dt class="mono" data-i18n="w.k.client">Klien</dt><dd data-i18n="w.4.client">CRP (internal)</dd></div>
+                <div><dt class="mono" data-i18n="w.k.type">Jenis</dt><dd data-i18n="w.4.type">Identitas brand</dd></div>
+                <div><dt class="mono" data-i18n="w.k.assets">Aset</dt><dd><span>Logo</span><span data-i18n="w.t.card">Kartu Nama</span><span data-i18n="w.t.soc">Media Sosial</span></dd></div>
+              </dl>
+            </div>
+            <i class="bk" aria-hidden="true"></i><i class="case-dim" aria-hidden="true"></i>
+          </div>
+        </article>
+      </div>
+
+      <div class="next">
+        <div><span class="next-l mono"><i class="sq bl"></i><span data-i18n="w.nextl">Berkas berikutnya</span></span><h3><span data-i18n="w.next">Proyek Anda bisa jadi yang berikutnya</span><i class="caret" aria-hidden="true"></i></h3></div>
+        <a class="hbtn btn-primary" data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener">
+          <span class="btn-roll"><span class="btn-t"><span data-i18n="nav.cta">Chat WhatsApp</span></span><span class="btn-t" aria-hidden="true"><span data-i18n="nav.cta">Chat WhatsApp</span></span></span>
+          <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.2M9 3.8 13.2 8 9 12.2"/></svg>
+        </a>
+        <i class="bk" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec glow" id="layanan" aria-labelledby="hLayanan">
+  <div class="fr">
+    <div class="rule"><b></b><i class="xm xm-l"></i><i class="xm xm-r"></i></div>
+    <div class="in">
+      <header class="shd">
+        <div class="meta mono"><span class="lab"><i class="sq"></i><span data-i18n="s.eyebrow" data-scr>Layanan</span></span><span data-i18n="s.meta" data-scr>Harga terbuka · IDR</span><span data-i18n="s.count" data-scr>04 layanan</span></div>
+        <div class="shd-g"><h2 class="sh" id="hLayanan"><span data-i18n="s.title">Apa yang bisa kami bantu</span><i class="pd" aria-hidden="true"></i></h2><p class="lead" data-i18n="s.lead">Pilih yang Anda butuhkan, kami kerjakan dari konsep sampai siap pakai. Detail paket kami jelaskan lewat WhatsApp.</p></div>
+      </header>
+
+      <div class="sec-body">
+        <div class="mods">
+          <article class="mod">
+            <i class="mod-tr" aria-hidden="true"></i>
+            <div class="mod-hd"><svg class="mod-ic" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 36C10 20 22 9 38 8"/><path class="d" d="M7 36 17 17"/><rect x="4.5" y="33.5" width="5" height="5" fill="#141F38"/><rect x="35.5" y="5.5" width="5" height="5" fill="#141F38"/><circle class="c" cx="17" cy="17" r="2.6"/></svg></div>
+            <h3 class="mod-t" data-i18n="s.1t">Logo &amp; Branding</h3>
+            <p class="mod-p" data-i18n="s.1p">Identitas visual yang mudah diingat, siap untuk cetak dan media sosial.</p>
+            <ul class="mod-inc" data-i18n="s.1i"><li>Logo &amp; identitas visual</li><li>Siap untuk cetak</li><li>Siap untuk media sosial</li></ul>
+            <a class="mod-cta mono" data-wa-msg="logo" href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="s.ask">Tanya paket ini</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.2M9 3.8 13.2 8 9 12.2"/></svg></a>
+          </article>
+          <article class="mod is-feat">
+            <i class="mod-tr" aria-hidden="true"></i>
+            <div class="mod-hd"><svg class="mod-ic" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="7" width="36" height="30" rx="3"/><path d="M4 14h36"/><path class="d" d="M10 21h16M10 26h11"/><circle cx="9" cy="10.5" r="1" fill="currentColor" stroke="none"/><rect class="c" x="26" y="28" width="9" height="4.5" rx="2.25"/></svg></div>
+            <h3 class="mod-t" data-i18n="s.2t">Website Usaha</h3>
+            <p class="mod-p" data-i18n="s.2p">Katalog, profil usaha, atau website gereja dengan tombol pesan via WhatsApp.</p>
+            <ul class="mod-inc" data-i18n="s.2i"><li>Katalog, profil usaha, atau gereja</li><li>Tombol pesan WhatsApp</li><li>Selesai 1–2 minggu, 2× revisi</li></ul>
+            <a class="mod-cta mono" data-wa-msg="web" href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="s.ask">Tanya paket ini</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.2M9 3.8 13.2 8 9 12.2"/></svg></a>
+          </article>
+          <article class="mod">
+            <i class="mod-tr" aria-hidden="true"></i>
+            <div class="mod-hd"><svg class="mod-ic" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="5" width="13" height="13"/><rect x="26" y="5" width="13" height="13"/><rect x="5" y="26" width="13" height="13"/><rect x="9.5" y="9.5" width="4" height="4" fill="currentColor" stroke="none"/><rect x="30.5" y="9.5" width="4" height="4" fill="currentColor" stroke="none"/><rect x="9.5" y="30.5" width="4" height="4" fill="currentColor" stroke="none"/><path class="d" d="M26 26h5v5M37 26v3M26 36h4M35 34v4h4"/><rect class="c" x="32" y="30" width="5" height="5"/></svg></div>
+            <h3 class="mod-t" data-i18n="s.3t">Menu Digital QR</h3>
+            <p class="mod-p" data-i18n="s.3p">Pelanggan scan QR di meja dan langsung melihat menu Anda.</p>
+            <ul class="mod-inc" data-i18n="s.3i"><li>QR code untuk meja</li><li>Menu langsung terbuka setelah scan</li></ul>
+            <a class="mod-cta mono" data-wa-msg="qr" href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="s.ask">Tanya paket ini</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.2M9 3.8 13.2 8 9 12.2"/></svg></a>
+          </article>
+          <article class="mod">
+            <i class="mod-tr" aria-hidden="true"></i>
+            <div class="mod-hd"><svg class="mod-ic" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="10" height="10"/><rect x="17" y="4" width="10" height="10"/><rect x="30" y="4" width="10" height="10"/><rect x="4" y="17" width="10" height="10"/><rect class="c" x="17" y="17" width="10" height="10"/><rect x="30" y="17" width="10" height="10"/><rect class="d" x="4" y="30" width="10" height="10"/><rect class="d" x="17" y="30" width="10" height="10"/><rect class="d" x="30" y="30" width="10" height="10"/></svg></div>
+            <h3 class="mod-t" data-i18n="s.4t">Konten Instagram</h3>
+            <p class="mod-p" data-i18n="s.4p">Desain feed dan story yang rapi dan konsisten dengan brand Anda.</p>
+            <ul class="mod-inc" data-i18n="s.4i"><li>10 desain per paket</li><li>Feed dan story</li></ul>
+            <a class="mod-cta mono" data-wa-msg="ig" href="https://wa.me/62895336924576" target="_blank" rel="noopener"><span data-i18n="s.ask">Tanya paket ini</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.2M9 3.8 13.2 8 9 12.2"/></svg></a>
+          </article>
+        </div>
+        <dl class="mods-note">
+          <dt class="mono" data-i18n="s.notel">Catatan</dt>
+          <dd data-i18n="s.note">Domain dan perawatan website dihitung terpisah. Semua detail paket kami jelaskan saat konsultasi.</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="proses" aria-labelledby="hProses">
+  <div class="fr pr-pin">
+    <div class="rule"><b></b><i class="xm xm-l"></i><i class="xm xm-r"></i></div>
+    <div class="in">
+      <header class="shd">
+        <div class="meta mono"><span class="lab"><i class="sq"></i><span data-i18n="p.eyebrow" data-scr>Proses</span></span><span data-i18n="p.meta" data-scr>Semua kabar lewat WhatsApp</span><span data-i18n="p.count" data-scr>04 tahap</span></div>
+        <div class="shd-g"><h2 class="sh" id="hProses"><span data-i18n="p.title">Mudah, cepat, tanpa ribet</span><i class="pd" aria-hidden="true"></i></h2><p class="lead" data-i18n="p.lead">Dari chat pertama sampai website online, semua kabar dikirim lewat WhatsApp.</p></div>
+      </header>
+      <div class="pr-track" id="prTrack">
+        <div class="pr-line" aria-hidden="true"></div><i class="pr-fill" aria-hidden="true"></i><i class="pr-spark" aria-hidden="true"></i>
+        <ol class="pr-steps">
+          <li class="pr-st"><span class="pr-n" aria-hidden="true">01</span><div class="txt"><h3 data-i18n="p.1t">Ngobrol dulu</h3><p data-i18n="p.1p">Ceritakan usaha dan kebutuhan Anda. Konsultasi gratis.</p></div></li>
+          <li class="pr-st"><span class="pr-n" aria-hidden="true">02</span><div class="txt"><h3 data-i18n="p.2t">Konsep &amp; DP 50%</h3><p data-i18n="p.2p">Kami kirim konsep awal. Pengerjaan dimulai setelah DP.</p></div></li>
+          <li class="pr-st"><span class="pr-n" aria-hidden="true">03</span><div class="txt"><h3 data-i18n="p.3t">Revisi</h3><p data-i18n="p.3p">Dua kali revisi sampai hasilnya pas dengan selera Anda.</p></div></li>
+          <li class="pr-st"><span class="pr-n" aria-hidden="true">04</span><div class="txt"><h3 data-i18n="p.4t">Online</h3><p data-i18n="p.4p">Website tayang dan semua file desain diserahkan lengkap.</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="testimoni" hidden>
+  <div class="fr"><div class="in">
+    <header class="shd"><div class="meta mono"><span class="lab"><i class="sq"></i><span data-i18n="t.eyebrow">Kata klien</span></span></div>
+      <div class="shd-g"><h2 class="sh"><span data-i18n="t.title">Mereka sudah mencoba</span><i class="pd" aria-hidden="true"></i></h2></div></header>
+    <div class="testi sec-body" id="testi-list"></div>
+  </div></div>
+</section>
+
+<section class="sec ct" id="kontak" aria-labelledby="hKontak">
+  <div class="ct-floor" aria-hidden="true"><i></i></div>
+  <div class="fr">
+    <div class="rule"><b></b><i class="xm xm-l"></i><i class="xm xm-r"></i></div>
+    <div class="in">
+      <div class="shd"><div class="meta mono"><span class="lab"><i class="sq bl"></i><span data-i18n="c.eyebrow" data-scr>Kontak</span></span><span>MANADO <b class="clk" data-clock>00:00:00</b> WITA</span><span data-i18n="c.meta" data-scr>Konsultasi gratis</span></div></div>
+      <div class="ct-g">
+        <div class="ct-main">
+          <h2 class="sh sh-xl" id="hKontak"><span data-i18n="c.title">Punya usaha? Ayo bikin tampil beda</span><i class="pd" aria-hidden="true"><i class="pd-r"></i><i class="pd-r"></i></i></h2>
+          <p class="lead" data-i18n="c.lead">Konsultasi gratis. Balasan cepat setelah jam kerja dan di akhir pekan.</p>
+          <div class="ct-ctas">
+            <a class="hbtn btn-primary" data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener">
+              <span class="btn-roll"><span class="btn-t"><span data-i18n="nav.cta">Chat WhatsApp</span></span><span class="btn-t" aria-hidden="true"><span data-i18n="nav.cta">Chat WhatsApp</span></span></span>
+              <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.2M9 3.8 13.2 8 9 12.2"/></svg>
+            </a>
+            <a class="hbtn btn-ghost" href="#layanan">
+              <span class="btn-roll"><span class="btn-t"><span data-i18n="c.cta2">Lihat layanan</span></span><span class="btn-t" aria-hidden="true"><span data-i18n="c.cta2">Lihat layanan</span></span></span>
+            </a>
+          </div>
+          <ul class="chs">
+            <li><span class="ch-k mono">WhatsApp</span><span class="ch-v" id="wa-num">0895-3369-24576</span><button class="ch-b" type="button" data-copy="0895336924576" data-copy-sel="wa-num"><span data-i18n="c.copy">Salin</span></button></li>
+            <li><span class="ch-k mono">Instagram</span><a class="ch-v" href="https://instagram.com/crp.works" target="_blank" rel="noopener">@crp.works</a><a class="ch-b" href="https://instagram.com/crp.works" target="_blank" rel="noopener" aria-label="Instagram @crp.works"><span data-i18n="c.open">Buka</span> ↗</a></li>
+            <li><span class="ch-k mono">Email</span><span class="ch-v" id="em-adr">crp.workss@gmail.com</span><button class="ch-b" type="button" data-copy="crp.workss@gmail.com" data-copy-sel="em-adr"><span data-i18n="c.copy">Salin</span></button></li>
+          </ul>
+        </div>
+        <aside class="qr" aria-label="QR WhatsApp">
+          <i class="bk" aria-hidden="true"></i>
+          <div class="qr-top mono"><span>QR · WhatsApp</span><i class="sq bl"></i></div>
+          <div class="qr-i"><img id="qrimg" width="180" height="180" alt="QR code WhatsApp CRP" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUgAAAFIAQMAAAAI2vVwAAAABlBMVEUbKkr///+zEOJ5AAABxElEQVR42u2by2oFMQxDRf//n11KYkspFKJsWqhmYJ5ZnetYsjMXdbshIzPyN0ZibXO3ntS65NsP3G7/eSQaPmYnaP404enw/DpBzoMTfBqePs/qSd7Tvio8n3muE1b2xH4Wns/5s6NyY9Tn4enw3Bc/7NF3k+dYp7FJo0L6Ojxdv9QBOfcM4PB04lNIYtS+wxMbcXg6PIuijnGeHa3Jn54e0bhT01mBbq0PT0OPJBB3SsXYp/D053uTowDN2y6dwvOeZ+sQJHM23Y7Z8LzlSZs55gjjoEahwvM+f+Ko4efQMRuedny2j4dI+hG34XnPsw7zdJb10yIJT8N/1tkA3QwP9xSeRv1OZYcudUBAh+c1zy067IKqt6/U7w/9unZJIvPMppnvZnyWBCQPJVVSeBp6RAkCk6iueqQ+8vQdOJJo9+dLs2p4Gnqk+ZP2aRAnPs38qV3Pb2tHnUHD0/Gf1CStMtUEhKfjl/jlF/uf51J8eBr6Dsq5LCPNF2LJn+Z81/UNaIeZHzGGp1NvkucQpp1HeL7wVAsP6dylX/can4O0tM+U+f6WPznpZQVp8ml4mvqu39RJswnpJ7/5z/xrIyP/3MhPwNtYIQE9HsgAAAAASUVORK5CYII="><i class="qr-scan" aria-hidden="true"></i></div>
+          <div class="qr-cap mono"><span data-i18n="c.scan">Scan untuk chat</span><b aria-hidden="true">↗</b></div>
+        </aside>
+      </div>
     </div>
   </div>
 </section>
 </main>
 
-<footer>
-  <div class="wrap"><div class="row"><span>© 2026 CRP · Manado, Sulawesi Utara</span><span><a href="https://instagram.com/crp.works" target="_blank" rel="noopener">Instagram</a> · <a data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener">WhatsApp</a></span></div></div>
-  <div class="mega" id="mega" aria-hidden="true">&lt;crp/&gt;</div>
+<footer class="ft">
+  <div class="fr">
+    <div class="rule"><b></b><i class="xm xm-l"></i><i class="xm xm-r"></i></div>
+    <div class="in ft-g">
+      <div>
+        <span class="mono" style="color:var(--ink-3);font-size:10.5px">CRP.WORKS — CREATIVE STUDIO</span>
+        <p class="ft-tag" data-i18n="f.tag">Studio desain &amp; website di Manado. Logo, menu, konten Instagram, dan website untuk usaha dan gereja.</p>
+      </div>
+      <nav class="ft-col" aria-label="Footer">
+        <span class="mono" data-i18n="f.nav">Navigasi</span>
+        <a href="#karya"><span data-i18n="nav.port">Portofolio</span></a><a href="#layanan"><span data-i18n="nav.svc">Layanan</span></a><a href="#proses"><span data-i18n="nav.proc">Proses</span></a><a href="#kontak"><span data-i18n="nav.contact">Kontak</span></a>
+      </nav>
+      <div class="ft-col">
+        <span class="mono" data-i18n="nav.contact">Kontak</span>
+        <a data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/crp.works" target="_blank" rel="noopener">Instagram</a><span>crp.workss@gmail.com</span>
+      </div>
+      <div class="ft-hud mono">
+        <span>MANADO <b data-clock>00:00:00</b> WITA</span>
+        <span>1.4748° N&nbsp;&nbsp;124.8421° E</span>
+        <a class="ft-top" href="#top"><span data-i18n="f.top">Kembali ke atas</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 11V1.6M2.2 5.2 6 1.4l3.8 3.8"/></svg></a>
+      </div>
+    </div>
+    <div class="ft-mark" aria-hidden="true">
+      <svg viewBox="0 -303.7 4578.3 1813.7" focusable="false"><use href="#crpGC"/><use href="#crpGR"/><use href="#crpGP"/><circle cx="4369.5" cy="-94.9" r="208.8"/></svg>
+    </div>
+    <div class="in"><div class="ft-bot mono"><span data-i18n="f.copy">© 2026 CRP · Manado, Sulawesi Utara</span><span>Instagram @crp.works</span></div></div>
+  </div>
 </footer>
   <div class="fx" aria-hidden="true">
     <svg class="fx-svg"><circle class="fx-shock" r="0"/><circle class="fx-micro" r="0"/><line class="fx-mline" x1="0" y1="0" x2="0" y2="0"/></svg>
@@ -746,91 +1117,87 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
 <div class="cur" aria-hidden="true"><i class="cur-ring"></i><i class="cur-dot"></i></div>
 
 <script>
+/* SITE: i18n (ID/EN), WhatsApp links, marquee, copy buttons, WITA clocks, FAB / progress state.
+   Runs before the libraries. Section motion lives in the last script ("Sections motion"); the preloader, nav,
+   hero, cursor, anchors and Lenis belong to the Spark script. Language switches fire crp:lang-before / crp:lang. */
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fine = window.matchMedia('(pointer: fine)').matches;
-  var body = document.body;
-  var $ = function(id){ return document.getElementById(id); };
-  var clamp = function(v,a,b){ return Math.max(a, Math.min(b, v)); };
-  var sy = 0, vh = innerHeight;
+  var body = document.body, doc = document;
+  var $ = function(id){ return doc.getElementById(id); };
+  var $$ = function(s, r){ return [].slice.call((r || doc).querySelectorAll(s)); };
+  var clamp = function(v, a, b){ return Math.max(a, Math.min(b, v)); };
 
-  /* The preloader, nav, hero, custom cursor and Lenis smooth scroll are owned by the Spark script at the end of the page. */
-
-  /* ---------- marquee words ---------- */
+  /* ---------- marquee: ghost words + mono tape ---------- */
   var words = ['LOGO','MENU','FEED INSTAGRAM','WEBSITE','MENU DIGITAL QR','BRANDING'];
-  function fillMq(el, off){
-    var seq = words.map(function(w, i){ var k = (i + off) % 3 === 0 ? ' class="f"' : ''; return '<span' + k + '>' + w + '</span><span class="x">✦</span>'; }).join('');
-    el.innerHTML = seq + seq + seq + seq;
+  function fillMq(){
+    var big = words.map(function(w, i){ return '<span' + (i % 3 === 0 ? ' class="f"' : '') + '>' + w + '</span><i></i>'; }).join('');
+    var tape = words.map(function(w){ return '<span>' + w + '</span><span class="x">+</span>'; }).join('');
+    $('mq1').innerHTML = big + big + big;
+    $('mq2').innerHTML = tape + tape + tape + tape + tape;
   }
-  fillMq($('mq1'), 0); fillMq($('mq2'), 1);
-  var mqs = [{el:$('mq1'), dir:-1, o:0},{el:$('mq2'), dir:1, o:0}];
-  mqs[1].o = 600;
-
-  /* ---------- warp (cta) ---------- */
-  var wc = $('warp'), wx = wc.getContext('2d'), ww = 0, wh = 0, stars = [], wv = false, wboost = 0;
-  function sizeW(){ var r = wc.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2); ww = r.width; wh = r.height; wc.width = ww * d; wc.height = wh * d; wx.setTransform(d,0,0,d,0,0); }
-  for(var s0 = 0; s0 < 240; s0++) stars.push({x:(Math.random()-.5)*2, y:(Math.random()-.5)*2, z:Math.random(), c:Math.random() < .28});
-  function drawW(){
-    wx.clearRect(0,0,ww,wh);
-    var cx = ww * .72, cy = wh * .5, sc = Math.min(ww, wh) * .55, speed = reduce ? 0 : .004 + wboost * .02;
-    for(var i = 0; i < stars.length; i++){
-      var s = stars[i], z0 = s.z, z1 = s.z - speed * 3.2;
-      s.z -= speed; if(s.z <= .03){ s.x = (Math.random()-.5)*2; s.y = (Math.random()-.5)*2; s.z = 1; continue; }
-      var x0 = cx + s.x / z0 * sc * .5, y0 = cy + s.y / z0 * sc * .5, x1 = cx + s.x / Math.max(z1, .02) * sc * .5, y1 = cy + s.y / Math.max(z1, .02) * sc * .5;
-      var a = clamp(1 - s.z, 0, 1); wx.strokeStyle = s.c ? 'rgba(255,107,74,' + a + ')' : 'rgba(255,255,255,' + a * .85 + ')'; wx.lineWidth = .5 + a * 1.6; wx.beginPath(); wx.moveTo(x0, y0); wx.lineTo(x1, y1); wx.stroke();
-      if(speed === 0){ wx.fillStyle = s.c ? 'rgba(255,107,74,.7)' : 'rgba(255,255,255,.6)'; wx.fillRect(x0, y0, 1.4, 1.4); }
-    }
+  fillMq();
+  var mqs = [{el:$('mq1'), dir:-1, o:0, sp:.5}, {el:$('mq2'), dir:1, o:240, sp:.35}], mqOn = false;
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ mqOn = es[0].isIntersecting; }, {rootMargin:'80px 0px'}).observe(doc.querySelector('.mqs'));
   }
 
-  /* ---------- scroll driven ---------- */
-  var sprog = $('sprog'), fab = $('fab'), hero = $('top'), kontak = $('kontak'), mega = $('mega');
-  var tl = $('tl'), sts = [].slice.call(document.querySelectorAll('.st')), cta = $('cta');
+  /* ---------- scroll state: after-hero (grain, rail), FAB, progress ---------- */
+  var sprog = $('sprog'), fab = $('fab'), hero = $('top'), kontak = $('kontak'), sy = 0;
   function onScroll(){
-    sy = window.scrollY; vh = innerHeight;
-    var doc = document.documentElement.scrollHeight - vh; sprog.style.setProperty('--sp', clamp(sy / doc, 0, 1).toFixed(4));
-    // timeline
-    var tr = tl.getBoundingClientRect(), tp = clamp((vh * .62 - tr.top) / tr.height, 0, 1);
-    tl.style.setProperty('--tp', tp.toFixed(4));
-    sts.forEach(function(s){ var b = s.getBoundingClientRect(); s.classList.toggle('on', b.top + b.height / 2 < vh * .62); });
-    // cta warp boost + visibility
-    var cr = cta.getBoundingClientRect(); wv = cr.top < vh && cr.bottom > 0; wboost = reduce ? 0 : clamp((vh - cr.top) / (vh * .9), 0, 1);
-    // grain + progress rail only after the hero; fab
+    sy = window.scrollY || 0;
+    var vh = innerHeight, max = doc.documentElement.scrollHeight - vh;
+    if(sprog) sprog.style.setProperty('--sp', clamp(sy / Math.max(1, max), 0, 1).toFixed(4));
     var hb = hero.getBoundingClientRect().bottom;
     body.classList.toggle('after-hero', hb < vh * .5);
-    var past = hb < 80, kr = kontak.getBoundingClientRect(), atCta = kr.top < vh * .8 && kr.bottom > 0;
-    fab.classList.toggle('off', !(past && !atCta));
-    // mega fill
-    var mr = mega.getBoundingClientRect(); mega.style.setProperty('--fp', (clamp((vh - mr.top) / (vh * .7), 0, 1) * 100).toFixed(1) + '%');
-    sweep();
+    var atCta = kontak.getBoundingClientRect().top < vh * .8;   // the closing shot and footer carry their own WhatsApp links
+    fab.classList.toggle('off', !(hb < 80 && !atCta));
   }
   var tickS = false;
   window.addEventListener('scroll', function(){ if(!tickS){ tickS = true; requestAnimationFrame(function(){ tickS = false; onScroll(); }); } }, {passive:true});
-  window.addEventListener('resize', function(){ vh = innerHeight; sizeW(); onScroll(); });
+  window.addEventListener('resize', onScroll);
 
-  /* reveal */
-  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ var t = e.target; t.classList.remove('pending'); io.unobserve(t); setTimeout(function(){ t.classList.remove('rv'); t.style.transitionDelay = ''; }, 1300); } }); }, {threshold:.12}) : null;
-  if(io && !reduce){ [].slice.call(document.querySelectorAll('.rv')).forEach(function(el, i){ if(el.getBoundingClientRect().top > innerHeight * .92){ el.classList.add('pending'); el.style.transitionDelay = ((i % 4) * .08) + 's'; io.observe(el); } }); }
-  function sweep(){ [].slice.call(document.querySelectorAll('.pending')).forEach(function(el){ if(el.getBoundingClientRect().top < innerHeight * .95) el.classList.remove('pending'); }); }
-
-  /* ---------- pointer: magnets, spotlight cards (the custom cursor belongs to the Spark script) ---------- */
-  if(fine && !reduce){
-    [].slice.call(document.querySelectorAll('.mag')).forEach(function(b){ b.addEventListener('mousemove', function(e){ var r = b.getBoundingClientRect(); b.style.transform = 'translate(' + ((e.clientX - r.left - r.width/2) * .22) + 'px,' + ((e.clientY - r.top - r.height/2) * .3) + 'px)'; }); b.addEventListener('mouseleave', function(){ b.style.transform = ''; }); });
-    [].slice.call(document.querySelectorAll('.sv')).forEach(function(c){ c.addEventListener('mousemove', function(e){ var r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; c.style.setProperty('--mx', x + 'px'); c.style.setProperty('--my', y + 'px'); c.style.transform = 'rotateX(' + ((.5 - y / r.height) * 7) + 'deg) rotateY(' + ((x / r.width - .5) * 7) + 'deg) translateY(-4px)'; }); c.addEventListener('mouseleave', function(){ c.style.transform = ''; }); });
+  /* ---------- featured service: its border light runs only while on screen ---------- */
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ e.target.classList.toggle('in-view', e.isIntersecting); }); });
+    $$('.mod.is-feat').forEach(function(m){ io.observe(m); });
   }
 
-  /* ---------- copy ---------- */
-  var cb = $('copy-wa');
-  cb.addEventListener('click', function(){ var done = function(){ cb.textContent = T[lang]['c.copied']; setTimeout(function(){ cb.textContent = T[lang]['c.copy']; }, 1600); }, sel = function(){ var rg = document.createRange(); rg.selectNodeContents($('wa-num')); var s = getSelection(); s.removeAllRanges(); s.addRange(rg); }; try{ navigator.clipboard.writeText('0895336924576').then(done, sel); }catch(e){ sel(); } });
+  /* ---------- WITA clocks ---------- */
+  var fmt = null;
+  try{ fmt = new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Makassar', hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23'}); }catch(e){ fmt = null; }
+  var clocks = $$('[data-clock]');
+  function tickClock(){
+    var s;
+    if(fmt) s = fmt.format(new Date());
+    else { var d = new Date(Date.now() + 8 * 3600e3), p = function(n){ return (n < 10 ? '0' : '') + n; }; s = p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds()); }
+    clocks.forEach(function(c){ if(c.textContent !== s) c.textContent = s; });
+  }
+  tickClock(); setInterval(tickClock, 1000);
 
-  /* ---------- main loop ---------- */
+  /* ---------- copy buttons ---------- */
+  $$('[data-copy]').forEach(function(b){
+    var label = b.querySelector('[data-i18n]'), timer = 0;
+    b.addEventListener('click', function(){
+      var done = function(){ b.classList.add('ok'); if(label) label.textContent = T[lang]['c.copied']; clearTimeout(timer); timer = setTimeout(function(){ b.classList.remove('ok'); if(label) label.innerHTML = T[lang]['c.copy']; }, 1600); };
+      var sel = function(){ var t = $(b.getAttribute('data-copy-sel')); if(!t) return; var rg = doc.createRange(); rg.selectNodeContents(t); var s = getSelection(); s.removeAllRanges(); s.addRange(rg); };
+      try{ navigator.clipboard.writeText(b.getAttribute('data-copy')).then(done, sel); }catch(e){ sel(); }
+    });
+  });
+
+  /* ---------- main loop: marquee (scroll velocity adds speed + skew) ---------- */
   var mqv = 0, lastSy = 0;
   function loop(){
     var v = sy - lastSy; lastSy = sy; mqv += (v - mqv) * .1;
-    mqs.forEach(function(m){ var half = m.el.scrollWidth / 2 || 1; m.o += m.dir * (.55 + Math.abs(mqv) * .35) * -1; if(m.o > half) m.o -= half; if(m.o < 0) m.o += half; m.el.style.transform = 'translate3d(' + (-m.o) + 'px,0,0) skewX(' + clamp(-mqv * .12, -8, 8) + 'deg)'; });
-    if(wv) drawW();
+    if(mqOn) mqs.forEach(function(m){
+      var w = m.el.scrollWidth / (m.el === mqs[0].el ? 3 : 5) || 1;
+      m.o += m.dir * (m.sp + Math.abs(mqv) * .3) * -1;
+      if(m.o > w) m.o -= w; if(m.o < 0) m.o += w;
+      m.el.style.transform = 'translate3d(' + (-m.o).toFixed(2) + 'px,0,0)' + (m.el === mqs[0].el ? ' skewX(' + clamp(-mqv * .1, -7, 7).toFixed(2) + 'deg)' : '');
+    });
     requestAnimationFrame(loop);
   }
-    /* ---------- i18n ---------- */
+
+  /* ---------- i18n ---------- */
   var QR = {id:'iVBORw0KGgoAAAANSUhEUgAAAUgAAAFIAQMAAAAI2vVwAAAABlBMVEUbKkr///+zEOJ5AAABxElEQVR42u2by2oFMQxDRf//n11KYkspFKJsWqhmYJ5ZnetYsjMXdbshIzPyN0ZibXO3ntS65NsP3G7/eSQaPmYnaP404enw/DpBzoMTfBqePs/qSd7Tvio8n3muE1b2xH4Wns/5s6NyY9Tn4enw3Bc/7NF3k+dYp7FJo0L6Ojxdv9QBOfcM4PB04lNIYtS+wxMbcXg6PIuijnGeHa3Jn54e0bhT01mBbq0PT0OPJBB3SsXYp/D053uTowDN2y6dwvOeZ+sQJHM23Y7Z8LzlSZs55gjjoEahwvM+f+Ko4efQMRuedny2j4dI+hG34XnPsw7zdJb10yIJT8N/1tkA3QwP9xSeRv1OZYcudUBAh+c1zy067IKqt6/U7w/9unZJIvPMppnvZnyWBCQPJVVSeBp6RAkCk6iueqQ+8vQdOJJo9+dLs2p4Gnqk+ZP2aRAnPs38qV3Pb2tHnUHD0/Gf1CStMtUEhKfjl/jlF/uf51J8eBr6Dsq5LCPNF2LJn+Z81/UNaIeZHzGGp1NvkucQpp1HeL7wVAsP6dylX/can4O0tM+U+f6WPznpZQVp8ml4mvqu39RJswnpJ7/5z/xrIyP/3MhPwNtYIQE9HsgAAAAASUVORK5CYII=', en:'iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoAQMAAABAK/OWAAAABlBMVEUbKkr///+zEOJ5AAACFElEQVR42u2bwU4EMQxDLf7/nwOiTeyW5bCS5wBy4bAdenoTHCfNot5ZyOmc/munsdbXR+D7CdbT/dfiifrAOyunX6x+Qdi/G728EfBECFp4b8RrWx3jWI9KToSgkTeaMpp9R394P8R74rkGfIX3Q/q9KFfHdu+j327e9Ce//cSfGHnTiIxc76AXSVkrBE16smNYcmZd9jt64tVvmkCoDxdBD2+bP9mZcgR9u/FSWx7etny5YY8TpF3pV7D3IejhLe7v8oRqCMPbqCfTKJmqhzlzpCUEXfE95pBi3Soiz0PQ4b8lqgECZwKt1JfWeodRrs2TU2OSL43+u/Pk0Y8dGd/2O/Ft7lfRrEzQH/TD25YvS8pKuVbrffygOV9O4V7shB9GPPpt5A12BLkBqOoNPQRN+o3rhqEEMuIHH+BdYkdKO4MT+NETn56IkMtEBHuFiW93v2r639A5FEhXPLxd9aX0qHTKqjgkkf63Nb4Boj6dYmfN3Kc547v0RgdgzpQiP/nS5k9Q59iJGpVSgx6CPv0uDWnKeBWH3cLbpifHHVqx0tGZlPA25UtIHc8xTfZpoyfu+K67RVj3TXL8tzG+R0nYNME5ppx6x9o/4ewadeSW7/C2+UH8+ELDeWXc2EPQyLvunokalfUeQtDN+5j5lnH7+O8n9Jv+EDoBjtwXP+RP9D5eLjb7HyAEjf473wHO6X93+hOUoIc4I4gZcAAAAABJRU5ErkJggg=='};
   var WA = 'https://wa.me/62895336924576?text=';
   var T = {
@@ -840,23 +1207,46 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
       'hero.h1':'Ide Kecil, Dampak Besar',   /* plain text; the coral period is added by the page */
       'hero.sub':'Kami membantu toko kue, warung makan, gereja, dan UMKM tampil profesional lewat desain brand dan website yang modern, cepat, dan mudah diakses.',
       'hero.cta1':'Konsultasi Gratis','hero.cta2':'Lihat Portofolio',
-      'w.eyebrow':'Karya pilihan','w.title':'Proyek nyata yang <em>sudah berjalan</em>','w.lead':'Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai.',
-      'w.real':'Proyek nyata','w.brandb':'Branding','w.next':'Proyek <em>Anda</em> bisa jadi yang berikutnya',
+      'k.label':'Sekilas','k.meta':'Cara kami bekerja',
+      'k.1l':'Waktu pengerjaan','pr.1a':'1–2<small>minggu</small>','pr.1b':'Website selesai','k.d1':'Hari 1','k.d14':'Hari 7–14',
+      'k.2l':'Revisi','pr.2a':'2×<small>revisi</small>','pr.2b':'Sudah termasuk','k.rcap':'Sudah termasuk paket',
+      'k.3l':'Konsultasi','pr.3a':'Gratis','pr.3b':'Konsultasi awal','k.cta':'Mulai lewat WhatsApp',
+      'w.eyebrow':'Portofolio','w.meta':'Studi kasus','w.count':'04 proyek',
+      'w.title':'Proyek nyata yang sudah berjalan','w.lead':'Sistem dan situs yang sudah dipakai, dari portal jemaat sampai absensi pegawai.',
+      'w.real':'Proyek nyata','w.brandb':'Branding','w.nextl':'Berkas berikutnya','w.next':'Proyek Anda bisa jadi yang berikutnya',
       'w.p1':'Portal pelayanan jemaat: keuangan, pemetaan data jemaat lewat sensus, warta, dan jadwal ibadah dalam satu tempat.','w.p2':'Presensi pegawai Kantor SAR Manado dengan geolokasi, selfie, pengenalan wajah, dan laporan real-time.','w.p3':'Situs studio kreatif Minahasa Utara untuk videografi, konten digital, branding, dan promosi daerah, lengkap dengan portofolio dan permintaan penawaran.',
+      'w.k.client':'Klien','w.k.type':'Jenis','w.k.feat':'Fitur','w.k.focus':'Fokus','w.k.stack':'Teknologi','w.k.assets':'Aset',
+      'w.1.type':'Portal pelayanan jemaat','w.2.client':'Kantor SAR Manado','w.2.type':'Sistem presensi pegawai','w.3.client':'Tunan Kreatif, Minahasa Utara',
+      'w.4.client':'CRP (internal)','w.4.type':'Identitas brand','w.4.k':'Cetak + digital','w.art':'Sistem identitas',
       'w.t.geo':'Geolokasi','w.t.face':'Pengenalan wajah','w.t.video':'Videografi','w.t.digital':'Konten digital','w.t.static':'Situs statis',
       'w.brand':'Identitas Brand CRP','w.brandp':'Logo, kartu nama dengan QR WhatsApp, dan aset media sosial dalam satu sistem warna.','w.t.card':'Kartu Nama','w.t.soc':'Media Sosial',
-      
       'a.p1d':'Halaman utama E-Pelayanan Jemaat GMIM Imanuel Talawaan','a.p2d':'Halaman login Absensi BASARNAS Sulawesi Utara','a.p3d':'Halaman utama Tunan Kreatif','a.phone':'Tampilan di HP',
       'm.tag':'DESAIN &amp; WEBSITE','m.role':'DESAINER &amp; PEMBUAT WEBSITE',
-      's.eyebrow':'Layanan','s.title':'Apa yang bisa <em>kami bantu</em>','s.lead':'Paket jelas dan harga terbuka. Klien pertama mendapat harga perkenalan.',
-      's.1t':'Logo &amp; Branding','s.1p':'Identitas visual yang mudah diingat, siap untuk cetak dan media sosial.','s.2t':'Website Usaha','s.2p':'Katalog, profil usaha, atau website gereja dengan tombol pesan via WhatsApp.','s.3t':'Menu Digital QR','s.3p':'Pelanggan scan QR di meja dan langsung melihat menu Anda.','s.4t':'Konten Instagram','s.4p':'Desain feed dan story yang rapi dan konsisten dengan brand Anda.','s.from':'Mulai dari','s.10':'Paket 10 desain',
-      's.note':'Domain website dibayar terpisah, sekitar Rp 150–200 rb per tahun. Perawatan bulanan mulai Rp 200 rb.',
-      'p.eyebrow':'Proses','p.title':'Mudah, cepat, <em>tanpa ribet</em>','p.lead':'Dari chat pertama sampai website online, semua kabar dikirim lewat WhatsApp.',
+      's.eyebrow':'Layanan','s.meta':'Paket sesuai kebutuhan','s.count':'04 layanan',
+      's.title':'Apa yang bisa kami bantu','s.lead':'Pilih yang Anda butuhkan, kami kerjakan dari konsep sampai siap pakai. Detail paket kami jelaskan lewat WhatsApp.',
+      's.1t':'Logo &amp; Branding','s.1p':'Identitas visual yang mudah diingat, siap untuk cetak dan media sosial.','s.2t':'Website Usaha','s.2p':'Katalog, profil usaha, atau website gereja dengan tombol pesan via WhatsApp.','s.3t':'Menu Digital QR','s.3p':'Pelanggan scan QR di meja dan langsung melihat menu Anda.','s.4t':'Konten Instagram','s.4p':'Desain feed dan story yang rapi dan konsisten dengan brand Anda.',
+      's.1i':'<li>Logo &amp; identitas visual</li><li>Siap untuk cetak</li><li>Siap untuk media sosial</li>',
+      's.2i':'<li>Katalog, profil usaha, atau gereja</li><li>Tombol pesan WhatsApp</li><li>Selesai 1–2 minggu, 2× revisi</li>',
+      's.3i':'<li>QR code untuk meja</li><li>Menu langsung terbuka setelah scan</li>',
+      's.4i':'<li>10 desain per paket</li><li>Feed dan story</li>',
+      's.ask':'Tanya paket ini','s.notel':'Catatan',
+      's.note':'Domain dan perawatan website dihitung terpisah. Semua detail paket kami jelaskan saat konsultasi.',
+      'p.eyebrow':'Proses','p.meta':'Semua kabar lewat WhatsApp','p.count':'04 tahap',
+      'p.title':'Mudah, cepat, tanpa ribet','p.lead':'Dari chat pertama sampai website online, semua kabar dikirim lewat WhatsApp.',
       'p.1t':'Ngobrol dulu','p.1p':'Ceritakan usaha dan kebutuhan Anda. Konsultasi gratis.','p.2t':'Konsep &amp; DP 50%','p.2p':'Kami kirim konsep awal. Pengerjaan dimulai setelah DP.','p.3t':'Revisi','p.3p':'Dua kali revisi sampai hasilnya pas dengan selera Anda.','p.4t':'Online','p.4p':'Website tayang dan semua file desain diserahkan lengkap.',
-      'c.title':'Punya usaha? Ayo bikin <em>tampil beda.</em>','c.lead':'Konsultasi gratis. Balasan cepat setelah jam kerja dan di akhir pekan.','c.copy':'Salin','c.copied':'Tersalin','c.scan':'Scan untuk chat','fab.tip':'Tanya-tanya dulu, gratis',
-      't.eyebrow':'Kata klien','t.title':'Mereka sudah <em>mencoba</em>',
+      'c.eyebrow':'Kontak','c.meta':'Konsultasi gratis',
+      'c.title':'Punya usaha? Ayo bikin tampil beda','c.lead':'Konsultasi gratis. Balasan cepat setelah jam kerja dan di akhir pekan.','c.cta2':'Lihat layanan',
+      'c.copy':'Salin','c.copied':'Tersalin','c.open':'Buka','c.scan':'Scan untuk chat','fab.tip':'Tanya-tanya dulu, gratis',
+      'f.tag':'Studio desain &amp; website di Manado. Logo, menu, konten Instagram, dan website untuk usaha dan gereja.','f.nav':'Navigasi','f.top':'Kembali ke atas','f.copy':'© 2026 CRP · Manado, Sulawesi Utara',
+      't.eyebrow':'Kata klien','t.title':'Mereka sudah mencoba',
       marquee:['LOGO','MENU','FEED INSTAGRAM','WEBSITE','MENU DIGITAL QR','BRANDING'],
-      msg:{def:'Halo, saya mau tanya jasa CRP'},
+      msg:{
+        def:'Halo, saya mau tanya jasa CRP',
+        logo:'Halo CRP, saya tertarik dengan layanan Logo & Branding. Boleh minta info lebih lanjut?',
+        web:'Halo CRP, saya tertarik membuat Website Usaha. Boleh minta info lebih lanjut?',
+        qr:'Halo CRP, saya tertarik dengan Menu Digital QR. Boleh minta info lebih lanjut?',
+        ig:'Halo CRP, saya tertarik dengan paket Konten Instagram. Boleh minta info lebih lanjut?'
+      },
       qrAlt:'QR code WhatsApp CRP'
     },
     en:{
@@ -865,23 +1255,46 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
       'hero.h1':'Small Ideas, Big Impact',
       'hero.sub':'We help bakeries, food stalls, churches and small businesses look professional with modern, fast and accessible brand design and websites.',
       'hero.cta1':'Free Consultation','hero.cta2':'See Portfolio',
-      'w.eyebrow':'Selected work','w.title':'Real projects <em>already running</em>','w.lead':'Systems and sites in daily use, from a congregation portal to staff attendance.',
-      'w.real':'Real project','w.brandb':'Branding','w.next':'Your project could be <em>next</em>',
+      'k.label':'At a glance','k.meta':'How we work',
+      'k.1l':'Turnaround','pr.1a':'1–2<small>weeks</small>','pr.1b':'Website delivered','k.d1':'Day 1','k.d14':'Day 7–14',
+      'k.2l':'Revisions','pr.2a':'2×<small>revisions</small>','pr.2b':'Included','k.rcap':'Included in every package',
+      'k.3l':'Consultation','pr.3a':'Free','pr.3b':'First consultation','k.cta':'Start on WhatsApp',
+      'w.eyebrow':'Portfolio','w.meta':'Case studies','w.count':'04 projects',
+      'w.title':'Real projects, already running','w.lead':'Systems and sites in daily use, from a congregation portal to staff attendance.',
+      'w.real':'Real project','w.brandb':'Branding','w.nextl':'Next file','w.next':'Your project could be next',
       'w.p1':'A congregation service portal: finances, census-based member mapping, bulletins, and service times in one place.','w.p2':'Staff attendance for the SAR Manado office with geolocation, selfies, face recognition, and real-time reports.','w.p3':'Website for a North Minahasa creative studio: videography, digital content, branding, and regional promotion, with a portfolio and quote requests.',
+      'w.k.client':'Client','w.k.type':'Type','w.k.feat':'Features','w.k.focus':'Focus','w.k.stack':'Stack','w.k.assets':'Assets',
+      'w.1.type':'Congregation service portal','w.2.client':'SAR Office Manado','w.2.type':'Staff attendance system','w.3.client':'Tunan Kreatif, North Minahasa',
+      'w.4.client':'CRP (in-house)','w.4.type':'Brand identity','w.4.k':'Print + digital','w.art':'Identity system',
       'w.t.geo':'Geolocation','w.t.face':'Face recognition','w.t.video':'Videography','w.t.digital':'Digital content','w.t.static':'Static site',
       'w.brand':'CRP Brand Identity','w.brandp':'Logo, a business card with a WhatsApp QR code, and social media assets in one color system.','w.t.card':'Business Card','w.t.soc':'Social Media',
-      
       'a.p1d':'Home page of the GMIM Imanuel Talawaan congregation portal','a.p2d':'Login page of the BASARNAS North Sulawesi attendance app','a.p3d':'Home page of Tunan Kreatif','a.phone':'Phone view',
       'm.tag':'DESIGN &amp; WEBSITE','m.role':'DESIGNER &amp; WEBSITE BUILDER',
-      's.eyebrow':'Services','s.title':'How we can <em>help</em>','s.lead':'Clear packages and open pricing. First clients get an introductory price.',
-      's.1t':'Logo &amp; Branding','s.1p':'A memorable visual identity, ready for print and social media.','s.2t':'Business Website','s.2p':'A catalog, business profile, or church website with a WhatsApp order button.','s.3t':'QR Digital Menu','s.3p':'Customers scan a QR code at the table and see your menu instantly.','s.4t':'Instagram Content','s.4p':'Feed and story designs that stay tidy and on-brand.','s.from':'Starting at','s.10':'10-design pack',
-      's.note':'Website domains are billed separately, about Rp 150–200k per year. Monthly maintenance starts at Rp 200k.',
-      'p.eyebrow':'Process','p.title':'Simple, fast, <em>no hassle</em>','p.lead':'From the first chat to your site going live, every update comes through WhatsApp.',
+      's.eyebrow':'Services','s.meta':'Tailored packages','s.count':'04 services',
+      's.title':'How we can help','s.lead':'Pick what you need and we take it from concept to ready to use. We share package details on WhatsApp.',
+      's.1t':'Logo &amp; Branding','s.1p':'A memorable visual identity, ready for print and social media.','s.2t':'Business Website','s.2p':'A catalog, business profile, or church website with a WhatsApp order button.','s.3t':'QR Digital Menu','s.3p':'Customers scan a QR code at the table and see your menu instantly.','s.4t':'Instagram Content','s.4p':'Feed and story designs that stay tidy and on-brand.',
+      's.1i':'<li>Logo &amp; visual identity</li><li>Print-ready</li><li>Ready for social media</li>',
+      's.2i':'<li>Catalog, business profile or church site</li><li>WhatsApp order button</li><li>Done in 1–2 weeks, 2 revisions</li>',
+      's.3i':'<li>QR code for your tables</li><li>Menu opens right after scanning</li>',
+      's.4i':'<li>10 designs per pack</li><li>Feed and stories</li>',
+      's.ask':'Ask about this','s.notel':'Notes',
+      's.note':'Domain and website maintenance are arranged separately. We explain every package detail during the consultation.',
+      'p.eyebrow':'Process','p.meta':'Every update on WhatsApp','p.count':'04 steps',
+      'p.title':'Simple, fast, no hassle','p.lead':'From the first chat to your site going live, every update comes through WhatsApp.',
       'p.1t':'Let’s talk','p.1p':'Tell us about your business and what you need. The consultation is free.','p.2t':'Concept &amp; 50% deposit','p.2p':'We send a first concept. Work starts after the deposit.','p.3t':'Revisions','p.3p':'Two rounds of revisions until it feels right.','p.4t':'Live','p.4p':'Your website goes live and you receive every design file.',
-      'c.title':'Have a business? Let’s make it <em>stand out.</em>','c.lead':'Free consultation. Quick replies after office hours and on weekends.','c.copy':'Copy','c.copied':'Copied','c.scan':'Scan to chat','fab.tip':'Ask us anything, it’s free',
-      't.eyebrow':'Client words','t.title':'What clients <em>say</em>',
+      'c.eyebrow':'Contact','c.meta':'Free consultation',
+      'c.title':'Have a business? Let’s make it stand out','c.lead':'Free consultation. Quick replies after office hours and on weekends.','c.cta2':'See services',
+      'c.copy':'Copy','c.copied':'Copied','c.open':'Open','c.scan':'Scan to chat','fab.tip':'Ask us anything, it’s free',
+      'f.tag':'A design &amp; website studio in Manado. Logos, menus, Instagram content and websites for businesses and churches.','f.nav':'Navigate','f.top':'Back to top','f.copy':'© 2026 CRP · Manado, North Sulawesi',
+      't.eyebrow':'Client words','t.title':'What clients say',
       marquee:['LOGOS','MENUS','INSTAGRAM FEEDS','WEBSITES','QR DIGITAL MENUS','BRANDING'],
-      msg:{def:"Hi, I'd like to ask about CRP services"},
+      msg:{
+        def:"Hi, I'd like to ask about CRP services",
+        logo:"Hi CRP, I'm interested in your Logo & Branding service. Could you tell me more?",
+        web:"Hi CRP, I'd like a Business Website. Could you tell me more?",
+        qr:"Hi CRP, I'm interested in a QR Digital Menu. Could you tell me more?",
+        ig:"Hi CRP, I'm interested in the Instagram Content pack. Could you tell me more?"
+      },
       qrAlt:'WhatsApp QR code for CRP'
     }
   };
@@ -895,26 +1308,28 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
     h.textContent = text; if(p) h.appendChild(p);
   }
   function waLinks(d){
-    [].slice.call(document.querySelectorAll('[data-wa]')).forEach(function(a){ a.href = WA + encodeURIComponent(d.msg.def); });
-    [].slice.call(document.querySelectorAll('[data-wa-msg]')).forEach(function(a){ a.href = WA + encodeURIComponent(d.msg[a.getAttribute('data-wa-msg')]); });
+    $$('[data-wa]').forEach(function(a){ a.href = WA + encodeURIComponent(d.msg.def); });
+    $$('[data-wa-msg]').forEach(function(a){ a.href = WA + encodeURIComponent(d.msg[a.getAttribute('data-wa-msg')] || d.msg.def); });
   }
   function apply(l){
-    var d = T[l]; lang = l; document.documentElement.lang = l;
-    [].slice.call(document.querySelectorAll('[data-i18n]')).forEach(function(el){ var v = d[el.getAttribute('data-i18n')]; if(v != null) el.innerHTML = v; });
-    [].slice.call(document.querySelectorAll('[data-i18n-alt]')).forEach(function(el){ var v = d[el.getAttribute('data-i18n-alt')]; if(v != null) el.setAttribute('alt', v); });
-    setH1(d['hero.h1']); words = d.marquee; fillMq($('mq1'), 0); fillMq($('mq2'), 1); waLinks(d);
+    var d = T[l]; lang = l; doc.documentElement.lang = l;
+    doc.dispatchEvent(new CustomEvent('crp:lang-before', {detail:l}));
+    $$('[data-i18n]').forEach(function(el){ var v = d[el.getAttribute('data-i18n')]; if(v != null) el.innerHTML = v; });
+    $$('[data-i18n-alt]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-alt')]; if(v != null) el.setAttribute('alt', v); });
+    setH1(d['hero.h1']); words = d.marquee; fillMq(); waLinks(d);
     var qi = $('qrimg'); qi.src = 'data:image/png;base64,' + QR[l]; qi.alt = d.qrAlt;
-    [].slice.call(document.querySelectorAll('[data-lang-btn]')).forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-lang-btn') === l ? 'true' : 'false'); });
-    if(typeof renderTesti === 'function') renderTesti(l);
+    $$('[data-lang-btn]').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-lang-btn') === l ? 'true' : 'false'); });
+    renderTesti(l);
+    doc.dispatchEvent(new CustomEvent('crp:lang', {detail:l}));
   }
   function switchTo(l){
     if(l === lang) return;
     try{ localStorage.setItem('crp-lang', l); }catch(e){}
     if(reduce){ apply(l); return; }
-    body.classList.add('swapping');
-    setTimeout(function(){ apply(l); requestAnimationFrame(function(){ body.classList.remove('swapping'); }); }, 220);
+    body.classList.add('swap-fx'); requestAnimationFrame(function(){ body.classList.add('swapping'); });
+    setTimeout(function(){ apply(l); requestAnimationFrame(function(){ body.classList.remove('swapping'); setTimeout(function(){ body.classList.remove('swap-fx'); }, 300); }); }, 240);
   }
-  [].slice.call(document.querySelectorAll('[data-lang-btn]')).forEach(function(b){ b.addEventListener('click', function(){ switchTo(b.getAttribute('data-lang-btn')); }); });
+  $$('[data-lang-btn]').forEach(function(b){ b.addEventListener('click', function(){ switchTo(b.getAttribute('data-lang-btn')); }); });
 
   /* testimonials: fill with REAL client quotes only; the section stays hidden while empty */
   var TESTI = [
@@ -925,13 +1340,14 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
     if(!TESTI || !TESTI.length){ sec.hidden = true; return; }
     sec.hidden = false;
     $('testi-list').innerHTML = TESTI.map(function(t){
-      return '<figure class="quote rv"><blockquote>' + esc(t.quote[l]) + '</blockquote><figcaption><span class="av">' + esc(t.name.charAt(0)) + '</span><span><b>' + esc(t.name) + '</b><small>' + esc(t.role[l]) + '</small></span></figcaption></figure>';
+      return '<figure class="quote"><blockquote>' + esc(t.quote[l]) + '</blockquote><figcaption><b>' + esc(t.name) + '</b><small>' + esc(t.role[l]) + '</small></figcaption></figure>';
     }).join('');
   }
   apply(lang);
+  window.CRPSite = { get lang(){ return lang; } };
 
-  sizeW(); onScroll();
-  if(reduce){ drawW(); } else { requestAnimationFrame(loop); }
+  onScroll();
+  if(!reduce) requestAnimationFrame(loop);
 })();
 </script>
 <!-- Spark: GSAP + plugins + Lenis (jsdelivr, pinned), then preloader B, then the hero script -->
@@ -3062,6 +3478,256 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
   if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(function () { if (ST) ST.refresh(); else measure(); });
   gsap.ticker.add(tick);
   startRun({ short: store.get(CONFIG.storage.seen) === '1' });
+})();
+</script>
+<script>
+/* Sections motion (after the Spark script; reuses its GSAP, ScrollTrigger, SplitText and Lenis).
+   HUD readouts decode in, headlines rise word by word and land on the coral dot, case files scan in and stack,
+   the process spark travels its line, the closing shot lights its grid floor, the footer wordmark is laser-drawn.
+   Everything is transform / opacity. Reduced motion or blocked libraries: the final composed state, no animation. */
+(function () {
+  'use strict';
+  var W = window, doc = document;
+  var gsap = W.gsap, ST = W.ScrollTrigger, SPLIT = W.SplitText;
+  var REDUCE = W.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var FINE = W.matchMedia('(pointer: fine)').matches;
+  var $ = function (s, r) { return (r || doc).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || doc).querySelectorAll(s)); };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var navH = function () { var n = doc.getElementById('crpNav'); return n ? Math.round(n.getBoundingClientRect().height) : 88; };
+
+  /* ---------- footer wordmark: stroke width in user units for a ~1.2px hairline ---------- */
+  var mark = $('.ft-mark svg');
+  function markStroke() { if (mark) { var w = mark.getBoundingClientRect().width || 1; mark.style.setProperty('--sw', (1.25 * 4578.3 / w).toFixed(2)); } }
+  markStroke();
+  W.addEventListener('resize', markStroke);
+
+  /* ---------- process: geometry + state (also used by the static fallback) ---------- */
+  var track = $('#prTrack'), steps = $$('.pr-st', track), fill = $('.pr-fill', track), spark = $('.pr-spark', track);
+  var pos = [], vertical = false, prP = 0, lived = false;
+  function prMeasure() {
+    vertical = W.matchMedia('(max-width:899px)').matches;
+    var tr = track.getBoundingClientRect();
+    pos = steps.map(function (s) {
+      var n = $('.pr-n', s).getBoundingClientRect();
+      return vertical ? (n.top + n.height / 2 - tr.top) : (n.left + n.width / 2 - tr.left);
+    });
+    track.style.setProperty('--a', pos[0] + 'px');
+    track.style.setProperty('--len', (pos[pos.length - 1] - pos[0]) + 'px');
+    prSet(prP);
+  }
+  function prSet(p) {
+    prP = p;
+    var a = pos[0] || 0, b = pos[pos.length - 1] || 0, d = (b - a) * p;
+    if (vertical) { spark.style.transform = 'translate3d(0,' + d.toFixed(1) + 'px,0)'; fill.style.transform = 'scaleY(' + p.toFixed(4) + ')'; }
+    else { spark.style.transform = 'translate3d(' + d.toFixed(1) + 'px,0,0)'; fill.style.transform = 'scaleX(' + p.toFixed(4) + ')'; }
+    steps.forEach(function (s, i) { s.classList.toggle('on', a + d >= pos[i] - 1); });
+    var last = steps[steps.length - 1];
+    if (p >= 0.995 && !lived) { lived = true; last.classList.add('live'); }
+    else if (p < 0.9 && lived) { lived = false; last.classList.remove('live'); }
+  }
+  prMeasure();
+  W.addEventListener('resize', prMeasure);
+
+  if (!gsap || !ST || REDUCE) {          // static: the composed final state
+    prSet(1);
+    var k = $('#kontak'); if (k) k.classList.add('is-live');
+    return;
+  }
+
+  /* ---------- helpers ---------- */
+  var GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  // HUD decode: characters lock in left to right. The target text is read when the reveal is built (already in the
+  // current language); the effect only ever moves forward and always ends on the target text.
+  function scramble(el, dur) {
+    var o = { p: 0 }, final = el.textContent, hi = -1;
+    var put = function () { el.textContent = final; };
+    return gsap.to(o, {
+      p: 1, duration: dur || 0.8, ease: 'none',
+      onUpdate: function () {
+        if (o.p >= 1 || o.p < hi) { put(); return; }
+        hi = o.p;
+        var n = final.length, k = Math.floor(o.p * n), s = final.slice(0, k);
+        for (var i = k; i < n; i++) { var ch = final[i]; s += (ch === ' ' || ch === '·' || ch === ',') ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0]; }
+        el.textContent = s;
+      },
+      onComplete: put, onInterrupt: put
+    });
+  }
+  // Paused reveal timelines. tl.rise(targets, {from props + tween opts}, position) is a fromTo with explicit end values
+  // (autoAlpha 1, y 0, ...), so a jump to the end or a ScrollTrigger refresh can never record a hidden end state.
+  var END = { autoAlpha: 1, y: 0, x: 0, yPercent: 0, scale: 1, scaleX: 1, scaleY: 1, rotate: 0 };
+  function mk() {
+    var tl = gsap.timeline({ paused: true });
+    tl.rise = function (t, vars, pos) {
+      var from = {}, to = {};
+      for (var k in vars) {
+        if (k in END) { from[k] = vars[k]; to[k] = END[k]; }
+        else if (k === 'transformOrigin') { from[k] = to[k] = vars[k]; }
+        else to[k] = vars[k];
+      }
+      tl.fromTo(t, from, to, pos);
+      return tl;
+    };
+    return tl;
+  }
+  var pending = [];                       // reveal timelines not yet played (finished at once on a language switch)
+  function reveal(trigger, tl, start) {
+    var rec = { tl: tl, st: null };
+    pending.push(rec);
+    rec.st = ST.create({ trigger: trigger, start: start || 'top 82%', once: true, onEnter: function () { tl.play(); } });
+    tl.eventCallback('onComplete', (function (prev) { return function () { if (prev) prev(); var i = pending.indexOf(rec); if (i > -1) pending.splice(i, 1); }; })(tl.eventCallback('onComplete')));
+    return rec;
+  }
+  doc.addEventListener('crp:lang-before', function () {
+    pending.slice().forEach(function (r) { if (r.st) r.st.kill(); r.tl.progress(1); });
+    pending.length = 0;
+  });
+
+  /* ---------- section heads: rule draws, readout decodes, headline rises, dot lands ---------- */
+  function headTl(sec) {
+    var rule = $(':scope > .fr > .rule > b', sec), xms = $$(':scope > .fr > .rule .xm', sec);
+    var meta = $$('.shd .meta [data-scr]', sec), metaRow = $('.shd .meta', sec);
+    var h = $('.sh > span', sec), dot = $('.sh > .pd', sec), lead = $('.shd-g .lead, .ct-main > .lead', sec);
+    var tl = mk();
+    if (rule) tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 1.3, ease: 'expo.inOut' }, 0);
+    if (xms.length) tl.rise(xms, { autoAlpha: 0, rotate: 90, duration: 0.6, stagger: 0.25, ease: 'power2.out' }, 0.3);
+    if (metaRow) tl.rise(metaRow, { autoAlpha: 0, duration: 0.3 }, 0.15);
+    meta.forEach(function (m, i) { tl.add(scramble(m, 0.75), 0.2 + i * 0.12); });
+    if (h && SPLIT) {
+      var split = SPLIT.create(h, { type: 'words', mask: 'words' });
+      tl.rise(split.words, { yPercent: 115, duration: 1.05, ease: 'expo.out', stagger: 0.045 }, 0.35);
+      tl.eventCallback('onComplete', function () { split.revert(); });
+    } else if (h) tl.rise(h, { autoAlpha: 0, y: 30, duration: 0.9, ease: 'expo.out' }, 0.35);
+    if (dot) tl.rise(dot, { scale: 0, duration: 0.7, ease: 'back.out(3)' }, '-=0.55');
+    if (lead) tl.rise(lead, { autoAlpha: 0, y: 18, duration: 0.9, ease: 'expo.out' }, 0.6);
+    return tl;
+  }
+  // SplitText measures with the real font: build the heads once the webfonts are in (the page is still at the hero)
+  var fontsReady = (doc.fonts && doc.fonts.ready) ? doc.fonts.ready : Promise.resolve();
+  fontsReady.then(function () {
+    $$('.sec:not([hidden])').forEach(function (sec) { reveal($('.shd', sec) || sec, headTl(sec), 'top 85%'); });
+  });
+  // footer rule
+  (function () {
+    var ft = $('.ft'), rule = $('.rule > b', ft);
+    var tl = mk();
+    tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 1.3, ease: 'expo.inOut' }, 0)
+      .rise($$('.ft-g > *', ft), { autoAlpha: 0, y: 24, duration: 0.9, ease: 'expo.out', stagger: 0.08 }, 0.2);
+    reveal(ft, tl, 'top 88%');
+  })();
+
+  /* ---------- spec bar: cells rise, instrument ticks grow ---------- */
+  (function () {
+    var g = $('.kp-g'); if (!g) return;
+    var tl = mk();
+    tl.rise($('.bk', g), { autoAlpha: 0, scale: 1.04, duration: 0.8, ease: 'expo.out' }, 0)
+      .rise($$('.kp-c', g), { autoAlpha: 0, y: 34, duration: 1, ease: 'expo.out', stagger: 0.1 }, 0.05)
+      .rise($$('.ticks i', g), { scaleY: 0, duration: 0.5, ease: 'power3.out', stagger: 0.03 }, 0.45)
+      .rise($$('.revs b', g), { autoAlpha: 0, x: -10, duration: 0.5, ease: 'power3.out', stagger: 0.12 }, 0.6);
+    reveal(g, tl, 'top 88%');
+  })();
+
+  /* ---------- case files ---------- */
+  $$('.case').forEach(function (c) {
+    var inner = $('.case-in', c), scan = $('.scan', c), line = $('.scan-l', c), ph = $('.ph', c), art = $('.art', c);
+    var tl = mk();
+    tl.rise(inner, { y: 70, autoAlpha: 0, duration: 1.1, ease: 'expo.out' }, 0);
+    if (scan) {
+      tl.fromTo(scan, { scaleY: 1 }, { scaleY: 0, duration: 1.25, ease: 'power3.inOut' }, 0.2)
+        .fromTo(line, { yPercent: 0, autoAlpha: 1 }, { yPercent: 100, duration: 1.25, ease: 'power3.inOut' }, 0.2)
+        .to(line, { autoAlpha: 0, duration: 0.25 }, 1.4);
+    }
+    if (art) tl.rise($$('.fl', art), { autoAlpha: 0, y: 40, rotate: -4, duration: 1.1, ease: 'expo.out', stagger: 0.15 }, 0.25);
+    if (ph) tl.rise(ph, { autoAlpha: 0, y: 46, duration: 1, ease: 'expo.out' }, 0.75);
+    tl.rise($$('.case-top, .case-t, .case-p, .spec-t > div', c), { autoAlpha: 0, y: 16, duration: 0.8, ease: 'expo.out', stagger: 0.06 }, 0.35);
+    reveal(c, tl, 'top 80%');
+
+    // pointer parallax: the phone floats above the desktop frame
+    var media = $('.case-media', c), bw = $('.bw, .art', c);
+    if (FINE && media && bw) {
+      var bx = gsap.quickTo(bw, 'x', { duration: 0.9, ease: 'power3' }), by = gsap.quickTo(bw, 'y', { duration: 0.9, ease: 'power3' });
+      var px = ph ? gsap.quickTo(ph, 'x', { duration: 0.9, ease: 'power3' }) : null, py = ph ? gsap.quickTo(ph, 'y', { duration: 0.9, ease: 'power3' }) : null;
+      media.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        var r = media.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
+        bx(nx * -10); by(ny * -8); if (px) { px(nx * 18); py(ny * 14); }
+      });
+      media.addEventListener('pointerleave', function () { bx(0); by(0); if (px) { px(0); py(0); } });
+    }
+  });
+  (function () {
+    var n = $('.next'); if (!n) return;
+    var tl = mk();
+    tl.rise(n, { autoAlpha: 0, y: 40, duration: 1, ease: 'expo.out' });
+    reveal(n, tl, 'top 90%');
+  })();
+
+  var mm = gsap.matchMedia();
+  // desktop: case files stack; the one underneath steps back and dims
+  mm.add('(min-width:1024px) and (min-height:700px)', function () {
+    var cs = $$('.case');
+    cs.forEach(function (c, i) {
+      if (i === cs.length - 1) return;
+      var nxt = cs[i + 1];
+      var stc = { trigger: nxt, start: 'top bottom', end: function () { return 'top ' + (navH() + 18 + (i + 1) * 14) + 'px'; }, scrub: true };
+      gsap.to($('.case-in', c), { scale: 0.94, ease: 'none', scrollTrigger: stc });
+      gsap.to($('.case-dim', c), { opacity: 0.55, ease: 'none', scrollTrigger: { trigger: nxt, start: stc.start, end: stc.end, scrub: true } });
+    });
+  });
+
+  /* ---------- services: modules rise ---------- */
+  (function () {
+    var mods = $$('.mod'); if (!mods.length) return;
+    var tl = mk();
+    tl.rise(mods, { autoAlpha: 0, y: 44, duration: 1, ease: 'expo.out', stagger: 0.08 }, 0)
+      .rise($$('.mod-ic', $('.mods')), { autoAlpha: 0, scale: 0.6, duration: 0.8, ease: 'back.out(2)', stagger: 0.08 }, 0.25);
+    tl.rise('.mods-note', { autoAlpha: 0, duration: 0.8 }, 0.6);
+    reveal($('.mods'), tl, 'top 84%');
+  })();
+
+  /* ---------- process: the spark travels the line ---------- */
+  var prObj = { p: 0 };
+  function prTween(st) { return gsap.to(prObj, { p: 1, ease: 'none', onUpdate: function () { prSet(prObj.p); }, scrollTrigger: st }); }
+  mm.add('(min-width:1024px) and (min-height:700px)', function () {
+    prTween({ trigger: '.pr-pin', start: function () { return 'top ' + navH() + 'px'; }, end: '+=115%', pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true });
+  });
+  mm.add('not all and (min-width:1024px) and (min-height:700px)', function () {
+    prTween({ trigger: track, start: 'top 72%', end: 'bottom 58%', scrub: 0.5, invalidateOnRefresh: true });
+  });
+  // the step texts arrive with the head; nodes pop as a set
+  (function () {
+    var tl = mk();
+    tl.rise($$('.pr-n', track), { scale: 0.4, autoAlpha: 0, duration: 0.7, ease: 'back.out(2.2)', stagger: 0.08 }, 0)
+      .rise($('.pr-line', track), { scaleX: vertical ? 1 : 0, scaleY: vertical ? 0 : 1, transformOrigin: '0 0', duration: 1.2, ease: 'expo.inOut' }, 0)
+      .rise(spark, { autoAlpha: 0, duration: 0.4 }, 0.5);
+    reveal(track, tl, 'top 85%');
+  })();
+
+  /* ---------- contact: grid floor + the dot starts pulsing ---------- */
+  ST.create({ trigger: '#kontak', start: 'top 70%', once: true, onEnter: function () { $('#kontak').classList.add('is-live'); } });
+  (function () {
+    var tl = mk();
+    tl.rise('.ct-ctas', { autoAlpha: 0, y: 20, duration: 0.9, ease: 'expo.out' }, 0)
+      .rise($$('.chs li'), { autoAlpha: 0, y: 14, duration: 0.8, ease: 'expo.out', stagger: 0.07 }, 0.1)
+      .rise('.qr', { autoAlpha: 0, y: 30, duration: 1.1, ease: 'expo.out' }, 0.15);
+    reveal($('.ct-g'), tl, 'top 80%');
+  })();
+
+  /* ---------- footer: the wordmark is laser-drawn as the page ends ---------- */
+  (function () {
+    if (!mark) return;
+    var uses = $$('use', mark), dotEl = $('circle', mark);
+    var lens = ['crpGC', 'crpGR', 'crpGP'].map(function (id) { var p = doc.getElementById(id); try { return p.getTotalLength(); } catch (e) { return 6000; } });
+    uses.forEach(function (u, i) { u.style.strokeDasharray = lens[i] + ' ' + lens[i]; u.style.strokeDashoffset = lens[i]; });
+    var tl = gsap.timeline({ scrollTrigger: { trigger: '.ft', start: 'top 75%', end: 'bottom bottom', scrub: 0.8 } });
+    uses.forEach(function (u, i) { tl.to(u, { strokeDashoffset: 0, duration: 1, ease: 'none' }, i * 0.22); });
+    tl.fromTo(dotEl, { scale: 0, transformOrigin: '50% 50%' }, { scale: 1, transformOrigin: '50% 50%', duration: 0.3, ease: 'back.out(3)' }, '>-0.1');
+  })();
+
+  // ScrollTrigger positions depend on fonts, images and the Spark measure: refresh once everything is in
+  W.addEventListener('load', function () { ST.refresh(); });
+  doc.addEventListener('crp:lang', function () { requestAnimationFrame(function () { prMeasure(); ST.refresh(); }); });
 })();
 </script>
 </body>
