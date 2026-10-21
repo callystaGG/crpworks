@@ -276,13 +276,12 @@ a.ch-v:hover{color:var(--coral)}
 
 /* ---------- footer ---------- */
 .ft{position:relative}
-.ft-g{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.7fr) minmax(0,.8fr) minmax(0,1fr);gap:40px clamp(24px,3vw,48px);padding-block:clamp(64px,7vw,96px) clamp(40px,5vw,72px)}
-.ft-tag{margin:18px 0 0;font:800 clamp(20px,1.75vw,26px)/1.25 var(--font);letter-spacing:-.02em;max-width:19em;text-wrap:balance}
+.ft-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:40px clamp(24px,3vw,48px);padding-block:clamp(64px,7vw,96px) clamp(40px,5vw,72px)}
 .ft-col{display:flex;flex-direction:column;align-items:flex-start;gap:9px;font-size:15px;min-width:0}
 .ft-col .mono{color:var(--ink-3);margin-bottom:8px;font-size:10.5px}
 .ft-col a,.ft-col span{color:var(--ink-2);transition:color .3s}
 .ft-col a:hover{color:var(--ink)}
-.ft-hud{display:flex;flex-direction:column;align-items:flex-start;gap:12px;color:var(--ink-2)}
+.ft-hud{display:flex;flex-direction:column;align-items:flex-start;justify-self:end;gap:12px;color:var(--ink-2)}
 .ft-hud b{font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums}
 .ft-top{display:inline-flex;align-items:center;gap:10px;margin-top:6px;padding:10px 14px;border:1px solid var(--rule-2);border-radius:999px;color:var(--ink);transition:border-color .3s,color .3s}
 .ft-top svg{width:12px;height:12px;transition:transform .45s var(--ease)}
@@ -314,7 +313,6 @@ a.ch-v:hover{color:var(--coral)}
 @media (max-width:1180px){
   .mods{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ft-g{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .ft-g>div:first-child{grid-column:1/-1}
 }
 @media (max-width:1023px){
   .case-in{grid-template-columns:minmax(0,1fr)}
@@ -364,7 +362,7 @@ a.ch-v:hover{color:var(--coral)}
   .qr-i{display:flex;justify-content:center}
   .ct-ctas .hbtn{width:100%}
   .ft-g{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);column-gap:20px}
-  .ft-hud{grid-column:1/-1}
+  .ft-hud{grid-column:1/-1;justify-self:start}
   .fab a{width:54px;height:54px}
   .fab .tip{display:none}
 }
@@ -756,7 +754,6 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
         <svg class="br br-bl" viewBox="0 0 24 24"><path d="M.5 0v23.5H24"/></svg>
         <svg class="br br-br" viewBox="0 0 24 24"><path d="M0 23.5h23.5V0"/></svg>
         <div class="hl hl-tl"><span class="tw">CRP.WORKS — CREATIVE STUDIO</span></div>
-        <div class="hl hl-tr"><span class="tw" id="crpClock">MANADO 00:00:00 WITA</span></div>
         <div class="hl hl-bl"><i class="blink"></i><span class="tw">1.4748° N  124.8421° E</span></div>
         <div class="hl hl-br"><span class="tw">SCROLL TO EXPLORE</span><i class="sline"></i></div>
         <i class="xh" style="left:12.5%;top:31%"></i>
@@ -1081,10 +1078,6 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
   <div class="fr">
     <div class="rule"><b></b><i class="xm xm-l"></i><i class="xm xm-r"></i></div>
     <div class="in ft-g">
-      <div>
-        <span class="mono" style="color:var(--ink-3);font-size:10.5px">CRP.WORKS — CREATIVE STUDIO</span>
-        <p class="ft-tag" data-i18n="f.tag">Studio desain &amp; website di Manado. Logo, menu, konten Instagram, dan website untuk usaha dan gereja.</p>
-      </div>
       <nav class="ft-col" aria-label="Footer">
         <span class="mono" data-i18n="f.nav">Navigasi</span>
         <a href="#karya"><span data-i18n="nav.port">Portofolio</span></a><a href="#layanan"><span data-i18n="nav.svc">Layanan</span></a><a href="#proses"><span data-i18n="nav.proc">Proses</span></a><a href="#kontak"><span data-i18n="nav.contact">Kontak</span></a>
@@ -1094,8 +1087,6 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
         <a data-wa href="https://wa.me/62895336924576" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/crp.works" target="_blank" rel="noopener">Instagram</a><span>crp.workss@gmail.com</span>
       </div>
       <div class="ft-hud mono">
-        <span>MANADO <b data-clock>00:00:00</b> WITA</span>
-        <span>1.4748° N&nbsp;&nbsp;124.8421° E</span>
         <a class="ft-top" href="#top"><span data-i18n="f.top">Kembali ke atas</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 11V1.6M2.2 5.2 6 1.4l3.8 3.8"/></svg></a>
       </div>
     </div>
